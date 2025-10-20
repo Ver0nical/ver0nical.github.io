@@ -20,30 +20,35 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="自此之后，有公义的冠冕为他留存">
-<meta property="og:type" content="website">
-<meta property="og:title" content="维罗妮卡小屋">
-<meta property="og:url" content="http://example.com/index.html">
+  <meta name="description" content="内容来源：arxiv整理翻译：Ver0nical 1 问题背景Large language models (LLMs) seek to emulate human intelligence through statistical training on extensive datasets Huang and Chang (2022).大语言模型旨在通过对海量数据集进行统计训练来模拟人类智能 (H">
+<meta property="og:type" content="article">
+<meta property="og:title" content="知识图谱能减少大语言模型的幻觉吗？&#x2F; 在开始学习前的一个概述">
+<meta property="og:url" content="http://example.com/2025/10/20/Can%20Knowledge%20Graphs%20Reduce%20Hallucinations%20in%20LLMs%20%EF%BC%9FA%20Survey%20%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E6%80%BB%E7%BB%93/index.html">
 <meta property="og:site_name" content="维罗妮卡小屋">
-<meta property="og:description" content="自此之后，有公义的冠冕为他留存">
+<meta property="og:description" content="内容来源：arxiv整理翻译：Ver0nical 1 问题背景Large language models (LLMs) seek to emulate human intelligence through statistical training on extensive datasets Huang and Chang (2022).大语言模型旨在通过对海量数据集进行统计训练来模拟人类智能 (H">
 <meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-10-20T12:55:55.029Z">
+<meta property="article:modified_time" content="2025-10-20T13:44:32.444Z">
 <meta property="article:author" content="Ver0nical">
+<meta property="article:tag" content="KGs">
+<meta property="article:tag" content="LLMs">
+<meta property="article:tag" content="综述">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="http://example.com/">
+<link rel="canonical" href="http://example.com/2025/10/20/Can%20Knowledge%20Graphs%20Reduce%20Hallucinations%20in%20LLMs%20%EF%BC%9FA%20Survey%20%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E6%80%BB%E7%BB%93/">
 
 
 <script id="page-configurations">
   // https://hexo.io/docs/variables.html
   CONFIG.page = {
     sidebar: "",
-    isHome : true,
-    isPost : false,
+    isHome : false,
+    isPost : true,
     lang   : 'zh-CN'
   };
 </script>
 
-  <title>维罗妮卡小屋</title>
+  <title>知识图谱能减少大语言模型的幻觉吗？/ 在开始学习前的一个概述 | 维罗妮卡小屋</title>
   
 
 
@@ -161,9 +166,10 @@
         <div class="content-wrap">
           
 
-          <div class="content index posts-expand">
+          <div class="content post posts-expand">
             
-      
+
+    
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
@@ -179,10 +185,9 @@
       <meta itemprop="name" content="维罗妮卡小屋">
     </span>
       <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/10/20/Can%20Knowledge%20Graphs%20Reduce%20Hallucinations%20in%20LLMs%20%EF%BC%9FA%20Survey%20%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E6%80%BB%E7%BB%93/" class="post-title-link" itemprop="url">知识图谱能减少大语言模型的幻觉吗？/ 在开始学习前的一个概述</a>
-        </h2>
+        <h1 class="post-title" itemprop="name headline">
+          知识图谱能减少大语言模型的幻觉吗？/ 在开始学习前的一个概述
+        </h1>
 
         <div class="post-meta">
             <span class="post-meta-item">
@@ -229,7 +234,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>内容来源：<a target="_blank" rel="noopener" href="https://arxiv.org/abs/2311.07914">arxiv</a><br>整理翻译：<a href="">Ver0nical</a></p>
+        <p>内容来源：<a target="_blank" rel="noopener" href="https://arxiv.org/abs/2311.07914">arxiv</a><br>整理翻译：<a href="">Ver0nical</a></p>
 <h2 id="1-问题背景"><a href="#1-问题背景" class="headerlink" title="1 问题背景"></a>1 问题背景</h2><p>Large language models (LLMs) seek to emulate human intelligence through statistical training on extensive datasets Huang and Chang (2022).<br>大语言模型旨在通过对海量数据集进行统计训练来模拟人类智能 (Huang and Chang, 2022)。</p>
 <p>LLMs also face challenges in accurately interpreting phrases or terms when the context is vague and resides in a knowledge gap region of the model, leading to outputs that may sound plausible but are often irrelevant or incorrect Ji et al. (2023); Lenat and Marcus (2023).<br>当语境模糊且处于模型的知识空白区域时，大语言模型在准确解释短语或术语方面也面临挑战，导致其输出可能听起来合理但往往不相关或不正确 (Ji et al., 2023; Lenat and Marcus, 2023)。</p>
 <p>This phenomenon, often termed “hallucinations,” undermines the reliability of these models Mallen et al. (2023).<br>这种现象，通常被称为“幻觉”，削弱了这些模型的可靠性 (Mallen et al., 2023)。</p>
@@ -273,7 +278,6 @@
 <p>These methods also help enforce consistency across the facts, obviating the necessity for laborious human-annotated data and enhancing the reliability of generated content.<br>这些方法还有助于确保事实的一致性，省去了繁琐的人工标注数据的必要性，并增强了生成内容的可靠性。</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">The fact-aware language model, KGLM Logan IV et al. (2019), referred to a knowledge graph to generate entities and facts relevant to the context.</span><br><span class="line">事实感知语言模型 KGLM (Logan IV et al., 2019) 通过参考知识图谱来生成与上下文相关的实体和事实。</span><br><span class="line"></span><br><span class="line">SURGE Kang et al. (2022b) retrieves high similarity context-relevant triples as a sub-graph from a knowledge graph.</span><br><span class="line">SURGE (Kang et al., 2022b) 从知识图谱中检索高相似度的上下文相关三元组作为子图。</span><br><span class="line"></span><br><span class="line">&quot;Text critic&quot; classifier Lango and Dusek (2023) was proposed to guide the generation by assessing the match between the input data and the generated text.</span><br><span class="line">研究者提出了“文本评判家”分类器 (Lango and Dusek, 2023)，通过评估输入数据与生成文本之间的匹配度来指导生成过程。</span><br><span class="line"></span><br><span class="line">FOLK Wang and Shu (2023) used first-order-logic (FOL) predicates for claim verification in online misinformation.</span><br><span class="line">FOLK (Wang and Shu, 2023) 使用一阶逻辑谓词对在线错误信息中的声称进行验证。</span><br><span class="line"></span><br><span class="line">Beyond verification, FOLK generates explicit explanations, providing valuable assistance to human fact-checkers in understanding and interpreting the model&#x27;s decisions.</span><br><span class="line">除了验证之外，FOLK 还生成明确的解释，为人类事实核查员理解和解释模型的决策提供了宝贵的帮助。</span><br></pre></td></tr></table></figure>
 
-      
     </div>
 
     
@@ -281,107 +285,47 @@
     
 
     
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2025/10/19/hello-world/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Ver0nical">
-      <meta itemprop="description" content="自此之后，有公义的冠冕为他留存">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="维罗妮卡小屋">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/10/19/hello-world/" class="post-title-link" itemprop="url">Hello World</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2025-10-19 11:43:46" itemprop="dateCreated datePublished" datetime="2025-10-19T11:43:46+08:00">2025-10-19</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2025-10-20 21:03:58" itemprop="dateModified" datetime="2025-10-20T21:03:58+08:00">2025-10-20</time>
-              </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>367</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/10/19/hello-world/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
         
-      
-    </div>
 
-    
-    
-    
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Ver0nical
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://example.com/2025/10/20/Can%20Knowledge%20Graphs%20Reduce%20Hallucinations%20in%20LLMs%20%EF%BC%9FA%20Survey%20%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E6%80%BB%E7%BB%93/" title="知识图谱能减少大语言模型的幻觉吗？&#x2F; 在开始学习前的一个概述">http://example.com/2025/10/20/Can Knowledge Graphs Reduce Hallucinations in LLMs ？A Survey 论文阅读总结/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
 
-    
+
       <footer class="post-footer">
-        <div class="post-eof"></div>
+          <div class="post-tags">
+              <a href="/tags/%E7%BB%BC%E8%BF%B0/" rel="tag"># 综述</a>
+              <a href="/tags/KGs/" rel="tag"># KGs</a>
+              <a href="/tags/LLMs/" rel="tag"># LLMs</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2025/10/19/hello-world/" rel="prev" title="Hello World">
+      <i class="fa fa-chevron-left"></i> Hello World
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
       </footer>
+    
   </article>
   
   
-  
-
-
   
 
 
@@ -434,6 +378,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E9%97%AE%E9%A2%98%E8%83%8C%E6%99%AF"><span class="nav-number">1.</span> <span class="nav-text">1 问题背景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E6%8F%90%E5%87%BA%E9%97%AE%E9%A2%98"><span class="nav-number">2.</span> <span class="nav-text">2 提出问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0"><span class="nav-number">3.</span> <span class="nav-text">3 问题描述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95"><span class="nav-number">4.</span> <span class="nav-text">4 解决方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-Knowledge-Aware-Inference-%E7%9F%A5%E8%AF%86%E6%84%9F%E7%9F%A5%E6%8E%A8%E7%90%86"><span class="nav-number">4.1.</span> <span class="nav-text">4.1 Knowledge-Aware Inference 知识感知推理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#4-1-1-KG-Augmented-Retrieval-%E7%9F%A5%E8%AF%86%E5%9B%BE%E8%B0%B1%E5%A2%9E%E5%BC%BA%E6%A3%80%E7%B4%A2"><span class="nav-number">4.1.1.</span> <span class="nav-text">4.1.1 KG-Augmented Retrieval 知识图谱增强检索</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E2%AD%904-1-2-KG-Augmented-Reasoning-%E7%9F%A5%E8%AF%86%E5%9B%BE%E8%B0%B1%E5%A2%9E%E5%BC%BA%E6%8E%A8%E7%90%86"><span class="nav-number">4.1.2.</span> <span class="nav-text">⭐4.1.2 KG-Augmented Reasoning 知识图谱增强推理</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-3-Knowledge-Controlled-Generation-%E7%9F%A5%E8%AF%86%E6%8E%A7%E5%88%B6%E7%94%9F%E6%88%90"><span class="nav-number">4.2.</span> <span class="nav-text">4.1.3 Knowledge-Controlled Generation 知识控制生成</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-Knowledge-Aware-Learning-%E7%9F%A5%E8%AF%86%E6%84%9F%E7%9F%A5%E5%AD%A6%E4%B9%A0"><span class="nav-number">4.3.</span> <span class="nav-text">4.2 Knowledge-Aware Learning 知识感知学习</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#4-2-1-Knowledge-Aware-Pre-Training-%E7%9F%A5%E8%AF%86%E6%84%9F%E7%9F%A5%E9%A2%84%E8%AE%AD%E7%BB%83"><span class="nav-number">4.3.1.</span> <span class="nav-text">4.2.1 Knowledge-Aware Pre-Training 知识感知预训练</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-2-2-Knowledge-Aware-Fine-Tuning-%E7%9F%A5%E8%AF%86%E6%84%9F%E7%9F%A5%E5%BE%AE%E8%B0%83"><span class="nav-number">4.3.2.</span> <span class="nav-text">4.2.2 Knowledge-Aware Fine-Tuning 知识感知微调</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-Knowledge-Aware-Validation-%E7%9F%A5%E8%AF%86%E6%84%9F%E7%9F%A5%E9%AA%8C%E8%AF%81"><span class="nav-number">4.4.</span> <span class="nav-text">4.3 Knowledge-Aware Validation 知识感知验证</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
