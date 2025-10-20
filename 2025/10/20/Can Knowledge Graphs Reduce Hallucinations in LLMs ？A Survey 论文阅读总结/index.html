@@ -28,7 +28,7 @@
 <meta property="og:description" content="内容来源：arxiv整理翻译：Ver0nical 1 问题背景Large language models (LLMs) seek to emulate human intelligence through statistical training on extensive datasets Huang and Chang (2022).大语言模型旨在通过对海量数据集进行统计训练来模拟人类智能 (H">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2025-10-20T12:55:55.029Z">
-<meta property="article:modified_time" content="2025-10-20T13:44:32.444Z">
+<meta property="article:modified_time" content="2025-10-20T13:46:58.251Z">
 <meta property="article:author" content="Ver0nical">
 <meta property="article:tag" content="KGs">
 <meta property="article:tag" content="LLMs">
@@ -197,7 +197,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2025-10-20 20:55:55 / 修改时间：21:44:32" itemprop="dateCreated datePublished" datetime="2025-10-20T20:55:55+08:00">2025-10-20</time>
+              <time title="创建时间：2025-10-20 20:55:55 / 修改时间：21:46:58" itemprop="dateCreated datePublished" datetime="2025-10-20T20:55:55+08:00">2025-10-20</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -238,6 +238,8 @@
 <h2 id="1-问题背景"><a href="#1-问题背景" class="headerlink" title="1 问题背景"></a>1 问题背景</h2><p>Large language models (LLMs) seek to emulate human intelligence through statistical training on extensive datasets Huang and Chang (2022).<br>大语言模型旨在通过对海量数据集进行统计训练来模拟人类智能 (Huang and Chang, 2022)。</p>
 <p>LLMs also face challenges in accurately interpreting phrases or terms when the context is vague and resides in a knowledge gap region of the model, leading to outputs that may sound plausible but are often irrelevant or incorrect Ji et al. (2023); Lenat and Marcus (2023).<br>当语境模糊且处于模型的知识空白区域时，大语言模型在准确解释短语或术语方面也面临挑战，导致其输出可能听起来合理但往往不相关或不正确 (Ji et al., 2023; Lenat and Marcus, 2023)。</p>
 <p>This phenomenon, often termed “hallucinations,” undermines the reliability of these models Mallen et al. (2023).<br>这种现象，通常被称为“幻觉”，削弱了这些模型的可靠性 (Mallen et al., 2023)。</p>
+<span id="more"></span>
+
 <h2 id="2-提出问题"><a href="#2-提出问题" class="headerlink" title="2 提出问题"></a>2 提出问题</h2><p>Can Knowledge Graphs Reduce Hallucinations in LLMs?<br>知识图谱能减少大语言模型的幻觉吗？</p>
 <h2 id="3-问题描述"><a href="#3-问题描述" class="headerlink" title="3 问题描述"></a>3 问题描述</h2><p>The LLMs primarily have three points of failure: a failure to comprehend the question due to lack of context, insufficient knowledge to respond accurately, or an inability to recall specific facts.<br>大语言模型主要有三个故障点：由于缺乏上下文而无法理解问题、知识不足无法准确回答、或者无法回忆起具体事实。</p>
 <h2 id="4-解决方法"><a href="#4-解决方法" class="headerlink" title="4 解决方法"></a>4 解决方法</h2><h3 id="4-1-Knowledge-Aware-Inference-知识感知推理"><a href="#4-1-Knowledge-Aware-Inference-知识感知推理" class="headerlink" title="4.1 Knowledge-Aware Inference 知识感知推理"></a>4.1 Knowledge-Aware Inference 知识感知推理</h3><p>LLMs often struggle with multi-step reasoning and, unlike humans, can not seek extra information to clarify ambiguous queries.<br>大语言模型通常难以进行多步推理，并且与人类不同，它们无法主动寻求额外信息来澄清模糊的查询。</p>
