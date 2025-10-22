@@ -20,30 +20,35 @@
     var CONFIG = {"hostname":"ver0nical","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="自此之后，有公义的冠冕为他留存">
-<meta property="og:type" content="website">
-<meta property="og:title" content="维罗妮卡小屋">
-<meta property="og:url" content="http://ver0nical/index.html">
+  <meta name="description" content="内容来源：arxiv整理翻译：Ver0nical 原文主要阐述了知识图谱驱动的检索增强生成是如何在具体知识领域发挥作用以及该模式的整体结构。由于笔者认为该论文主要涉及应用而非算法，故此处不总结原文，仅给出内容分析。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="知识图谱驱动的检索增强生成">
+<meta property="og:url" content="http://ver0nical/2025/10/22/%E7%9F%A5%E8%AF%86%E5%9B%BE%E8%B0%B1%E9%A9%B1%E5%8A%A8%E7%9A%84%E6%A3%80%E7%B4%A2%E5%A2%9E%E5%BC%BA%E7%94%9F%E6%88%90%E7%A0%94%E7%A9%B6/index.html">
 <meta property="og:site_name" content="维罗妮卡小屋">
-<meta property="og:description" content="自此之后，有公义的冠冕为他留存">
+<meta property="og:description" content="内容来源：arxiv整理翻译：Ver0nical 原文主要阐述了知识图谱驱动的检索增强生成是如何在具体知识领域发挥作用以及该模式的整体结构。由于笔者认为该论文主要涉及应用而非算法，故此处不总结原文，仅给出内容分析。">
 <meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-10-22T02:18:59.166Z">
+<meta property="article:modified_time" content="2025-10-22T06:33:45.140Z">
 <meta property="article:author" content="Ver0nical">
+<meta property="article:tag" content="KGs">
+<meta property="article:tag" content="LLMs">
+<meta property="article:tag" content="RAG">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="http://ver0nical/">
+<link rel="canonical" href="http://ver0nical/2025/10/22/%E7%9F%A5%E8%AF%86%E5%9B%BE%E8%B0%B1%E9%A9%B1%E5%8A%A8%E7%9A%84%E6%A3%80%E7%B4%A2%E5%A2%9E%E5%BC%BA%E7%94%9F%E6%88%90%E7%A0%94%E7%A9%B6/">
 
 
 <script id="page-configurations">
   // https://hexo.io/docs/variables.html
   CONFIG.page = {
     sidebar: "",
-    isHome : true,
-    isPost : false,
+    isHome : false,
+    isPost : true,
     lang   : 'zh-CN'
   };
 </script>
 
-  <title>维罗妮卡小屋</title>
+  <title>知识图谱驱动的检索增强生成 | 维罗妮卡小屋</title>
   
 
 
@@ -161,112 +166,10 @@
         <div class="content-wrap">
           
 
-          <div class="content index posts-expand">
+          <div class="content post posts-expand">
             
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://ver0nical/2025/10/22/KG/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Ver0nical">
-      <meta itemprop="description" content="自此之后，有公义的冠冕为他留存">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="维罗妮卡小屋">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/10/22/KG/" class="post-title-link" itemprop="url">知识图谱（Knowledge Graphs）入门知识整理</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2025-10-22 10:19:50 / 修改时间：14:04:39" itemprop="dateCreated datePublished" datetime="2025-10-22T10:19:50+08:00">2025-10-22</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%9F%A5%E8%AF%86%E6%80%BB%E7%BB%93/" itemprop="url" rel="index"><span itemprop="name">知识总结</span></a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>5.1k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>5 分钟</span>
-            </span>
-
-        </div>
-      </header>
 
     
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>内容整理：<a target="_blank" rel="noopener" href="https://github.com/Ver0nical">Ver0nical</a></p>
-<h2 id="KGs"><a href="#KGs" class="headerlink" title="KGs"></a>KGs</h2><h3 id="Consist"><a href="#Consist" class="headerlink" title="Consist"></a>Consist</h3><ul>
-<li>Nodes (Entities) (节点 &#x2F; 实体)</li>
-<li>Edges (边)</li>
-<li>Attributes (属性)</li>
-</ul>
-<h3 id="KGC-知识图谱补全"><a href="#KGC-知识图谱补全" class="headerlink" title="KGC (知识图谱补全)"></a>KGC (知识图谱补全)</h3><h4 id="Transductive-传递式"><a href="#Transductive-传递式" class="headerlink" title="Transductive (传递式)"></a>Transductive (传递式)</h4><h5 id="Rule-based-reasoning-基于规则的推理"><a href="#Rule-based-reasoning-基于规则的推理" class="headerlink" title="Rule-based reasoning (基于规则的推理)"></a>Rule-based reasoning (基于规则的推理)</h5><ul>
-<li>Horn rules (霍恩规则)</li>
-<li>Rely on explicit IF-THEN statements defined by human experts or learned from data</li>
-</ul>
-<blockquote>
-<p>依赖于由专家定义的明确的“如果-那么”规则，或者从数据中学习得来</p>
-</blockquote>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/10/22/KG/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
@@ -282,10 +185,9 @@
       <meta itemprop="name" content="维罗妮卡小屋">
     </span>
       <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/10/22/%E7%9F%A5%E8%AF%86%E5%9B%BE%E8%B0%B1%E9%A9%B1%E5%8A%A8%E7%9A%84%E6%A3%80%E7%B4%A2%E5%A2%9E%E5%BC%BA%E7%94%9F%E6%88%90%E7%A0%94%E7%A9%B6/" class="post-title-link" itemprop="url">知识图谱驱动的检索增强生成</a>
-        </h2>
+        <h1 class="post-title" itemprop="name headline">
+          知识图谱驱动的检索增强生成
+        </h1>
 
         <div class="post-meta">
             <span class="post-meta-item">
@@ -332,17 +234,29 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>内容来源：<a target="_blank" rel="noopener" href="https://arxiv.org/abs/2502.11108">arxiv</a><br>整理翻译：<a target="_blank" rel="noopener" href="https://github.com/Ver0nical">Ver0nical</a></p>
+        <p>内容来源：<a target="_blank" rel="noopener" href="https://arxiv.org/abs/2502.11108">arxiv</a><br>整理翻译：<a target="_blank" rel="noopener" href="https://github.com/Ver0nical">Ver0nical</a></p>
 <p>原文主要阐述了知识图谱驱动的检索增强生成是如何在具体知识领域发挥作用以及该模式的整体结构。由于笔者认为该论文主要涉及应用而非算法，故此处不总结原文，仅给出内容分析。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/10/22/%E7%9F%A5%E8%AF%86%E5%9B%BE%E8%B0%B1%E9%A9%B1%E5%8A%A8%E7%9A%84%E6%A3%80%E7%B4%A2%E5%A2%9E%E5%BC%BA%E7%94%9F%E6%88%90%E7%A0%94%E7%A9%B6/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
+<span id="more"></span>
+
+<h2 id="系统的整体结构"><a href="#系统的整体结构" class="headerlink" title="系统的整体结构"></a>系统的整体结构</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">flowchart TD</span><br><span class="line">    subgraph Phase1 [阶段一：注释与数据收集]</span><br><span class="line">        A[使用Protege构建&lt;br&gt;CausalAMD本体] --&gt; B[使用本体标注&lt;br&gt;医学摘要]</span><br><span class="line">    end</span><br><span class="line"></span><br><span class="line">    subgraph Phase2 [阶段二：数据处理与知识图谱构建]</span><br><span class="line">        C[使用LLM&lt;br&gt;提取因果关系] --&gt; D[关系精炼&lt;br&gt;消歧/归一化/去重]</span><br><span class="line">        D --&gt; E[使用HermiT推理机&lt;br&gt;进行知识推理]</span><br><span class="line">        E --&gt; F[存入GraphDB&lt;br&gt;形成知识图谱]</span><br><span class="line">    end</span><br><span class="line"></span><br><span class="line">    subgraph Phase3 [阶段三：检索增强生成RAG]</span><br><span class="line">        G[用户查询] --&gt; H[Weaviate向量数据库&lt;br&gt;语义检索]</span><br><span class="line">        F --&gt; I[知识图谱&lt;br&gt;提供结构化数据]</span><br><span class="line">        I --&gt; H</span><br><span class="line">        H --&gt; J[构建增强上下文&lt;br&gt;含实体/关系/出版物]</span><br><span class="line">        J --&gt; K[DeepSeek-R1模型&lt;br&gt;生成可验证答案]</span><br><span class="line">        K --&gt; L[用户]</span><br><span class="line">    end</span><br><span class="line"></span><br><span class="line">    Phase1 --&gt; Phase2 --&gt; Phase3</span><br></pre></td></tr></table></figure>
+
+<p>其中，所使用的工具如下：</p>
+<ul>
+<li><strong>GraphDB</strong>: 一个图数据库，专门用于存储和查询RDF三元组形式的数据。它的原理是基于图论，能高效地处理实体之间复杂的、互联的关系，并支持SPARQL查询语言，非常适合表示知识图谱。</li>
+<li><strong>Weaviate</strong>: 一个向量数据库。它的原理是将数据（如文本、图像）通过深度学习模型转换为高维向量（embeddings）。当进行搜索时，它通过计算向量之间的余弦相似度来找到语义上最接近的结果，而不是简单的关键词匹配，这使得检索更智能、更准确。</li>
+<li><strong>DeepSeek-R1</strong>: 一个开源的大语言模型。本文将其本地部署（通过Ollama），原理是利用其强大的自然语言理解和生成能力。本地部署的好处是数据隐私性好、无网络延迟、且无API调用成本。</li>
+<li><strong>HermiT</strong>: 一个本体推理机。它的原理是基于描述逻辑和规则，对本体中的数据进行检查和推理。例如，如果知识图谱中有“A治疗B”和“B是C的症状”，HermiT可以推理出“A改善C的症状”，从而自动丰富知识图谱。</li>
+</ul>
+<h2 id="创新-优点一览"><a href="#创新-优点一览" class="headerlink" title="创新&#x2F;优点一览"></a>创新&#x2F;优点一览</h2><ol>
+<li>本系统从高度结构化的知识图谱中检索，信息质量更高、关联性更强。</li>
+<li>用于信息抽取的提示词模板是直接从本体自动生成的。这意味着当本体更新（如新增实体类型）时，提示词会自动同步，确保了抽取过程与领域模型的一致性。论文中通过少样本提示策略，有效约束了LLM的输出格式，提高了抽取的准确性。</li>
+<li>当证据不足或存在冲突时，系统被设计为主动声明不确定性，而不是强行给出一个可能错误的答案。</li>
+<li>从非结构化的文本，到结构化的三元组，再到经过消歧、归一化、去重和推理的高质量知识图谱，系统构建了一个完整的、自动化的数据精炼流水线。这个设计确保了注入RAG系统的知识是干净、一致和丰富的，从源头上提升了最终答案的质量。</li>
+</ol>
+<h2 id="总结与收获"><a href="#总结与收获" class="headerlink" title="总结与收获"></a>总结与收获</h2><p>也许它会是一个成功的医学系统，但当我被它的标题开头的<strong>KG-Driven RAG</strong>所吸引而忽略了最后面不起眼的<strong>Advanced Chatbot Applocations</strong>时，它对我就是失败的。</p>
+<p>如果只允许我用两个词评价我看这篇论文的心路历程，那就是<strong>复习</strong>。</p>
+<p><strong>收获就是我下次找论文一定要先看实验部分！</strong></p>
+
     </div>
 
     
@@ -350,109 +264,50 @@
     
 
     
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://ver0nical/2025/10/20/Can%20Knowledge%20Graphs%20Reduce%20Hallucinations%20in%20LLMs%20%EF%BC%9FA%20Survey%20%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E6%80%BB%E7%BB%93/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Ver0nical">
-      <meta itemprop="description" content="自此之后，有公义的冠冕为他留存">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="维罗妮卡小屋">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/10/20/Can%20Knowledge%20Graphs%20Reduce%20Hallucinations%20in%20LLMs%20%EF%BC%9FA%20Survey%20%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E6%80%BB%E7%BB%93/" class="post-title-link" itemprop="url">知识图谱能减少大语言模型的幻觉吗？/ 在开始学习前的一个概述</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2025-10-20 20:55:55 / 修改时间：21:55:35" itemprop="dateCreated datePublished" datetime="2025-10-20T20:55:55+08:00">2025-10-20</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>12k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>11 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>内容来源：<a target="_blank" rel="noopener" href="https://arxiv.org/abs/2311.07914">arxiv</a><br>整理翻译：<a target="_blank" rel="noopener" href="https://github.com/Ver0nical">Ver0nical</a></p>
-<h2 id="1-问题背景"><a href="#1-问题背景" class="headerlink" title="1 问题背景"></a>1 问题背景</h2><p>Large language models (LLMs) seek to emulate human intelligence through statistical training on extensive datasets Huang and Chang (2022).<br>大语言模型旨在通过对海量数据集进行统计训练来模拟人类智能 (Huang and Chang, 2022)。</p>
-<p>LLMs also face challenges in accurately interpreting phrases or terms when the context is vague and resides in a knowledge gap region of the model, leading to outputs that may sound plausible but are often irrelevant or incorrect Ji et al. (2023); Lenat and Marcus (2023).<br>当语境模糊且处于模型的知识空白区域时，大语言模型在准确解释短语或术语方面也面临挑战，导致其输出可能听起来合理但往往不相关或不正确 (Ji et al., 2023; Lenat and Marcus, 2023)。</p>
-<p>This phenomenon, often termed “hallucinations,” undermines the reliability of these models Mallen et al. (2023).<br>这种现象，通常被称为“幻觉”，削弱了这些模型的可靠性 (Mallen et al., 2023)。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/10/20/Can%20Knowledge%20Graphs%20Reduce%20Hallucinations%20in%20LLMs%20%EF%BC%9FA%20Survey%20%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E6%80%BB%E7%BB%93/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
         
-      
-    </div>
 
-    
-    
-    
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Ver0nical
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://ver0nical/2025/10/22/%E7%9F%A5%E8%AF%86%E5%9B%BE%E8%B0%B1%E9%A9%B1%E5%8A%A8%E7%9A%84%E6%A3%80%E7%B4%A2%E5%A2%9E%E5%BC%BA%E7%94%9F%E6%88%90%E7%A0%94%E7%A9%B6/" title="知识图谱驱动的检索增强生成">http://ver0nical/2025/10/22/知识图谱驱动的检索增强生成研究/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
 
-    
+
       <footer class="post-footer">
-        <div class="post-eof"></div>
+          <div class="post-tags">
+              <a href="/tags/KGs/" rel="tag"># KGs</a>
+              <a href="/tags/LLMs/" rel="tag"># LLMs</a>
+              <a href="/tags/RAG/" rel="tag"># RAG</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2025/10/20/Can%20Knowledge%20Graphs%20Reduce%20Hallucinations%20in%20LLMs%20%EF%BC%9FA%20Survey%20%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E6%80%BB%E7%BB%93/" rel="prev" title="知识图谱能减少大语言模型的幻觉吗？/ 在开始学习前的一个概述">
+      <i class="fa fa-chevron-left"></i> 知识图谱能减少大语言模型的幻觉吗？/ 在开始学习前的一个概述
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2025/10/22/KG/" rel="next" title="知识图谱（Knowledge Graphs）入门知识整理">
+      知识图谱（Knowledge Graphs）入门知识整理 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
       </footer>
+    
   </article>
   
   
-  
-
-
   
 
 
@@ -505,6 +360,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B3%BB%E7%BB%9F%E7%9A%84%E6%95%B4%E4%BD%93%E7%BB%93%E6%9E%84"><span class="nav-number">1.</span> <span class="nav-text">系统的整体结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9B%E6%96%B0-%E4%BC%98%E7%82%B9%E4%B8%80%E8%A7%88"><span class="nav-number">2.</span> <span class="nav-text">创新&#x2F;优点一览</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93%E4%B8%8E%E6%94%B6%E8%8E%B7"><span class="nav-number">3.</span> <span class="nav-text">总结与收获</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 

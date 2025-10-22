@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 8.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"ver0nical","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="内容整理：Ver0nical KGsConsist Nodes (Entities) (节点 &#x2F; 实体) Edges (边) Attributes (属性)  KGC (知识图谱补全)Transductive (传递式)Rule-based reasoning (基于规则的推理) Horn rules (霍恩规则) Rely on explicit IF-THEN statements">
+<meta property="og:type" content="article">
+<meta property="og:title" content="知识图谱（Knowledge Graphs）入门知识整理">
+<meta property="og:url" content="http://ver0nical/2025/10/22/KG/index.html">
+<meta property="og:site_name" content="维罗妮卡小屋">
+<meta property="og:description" content="内容整理：Ver0nical KGsConsist Nodes (Entities) (节点 &#x2F; 实体) Edges (边) Attributes (属性)  KGC (知识图谱补全)Transductive (传递式)Rule-based reasoning (基于规则的推理) Horn rules (霍恩规则) Rely on explicit IF-THEN statements">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-10-22T02:19:50.899Z">
+<meta property="article:modified_time" content="2025-10-22T06:04:39.912Z">
+<meta property="article:author" content="Ver0nical">
+<meta property="article:tag" content="KGs">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://ver0nical/2025/10/22/KG/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>知识图谱（Knowledge Graphs）入门知识整理 | 维罗妮卡小屋</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">维罗妮卡小屋</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-schedule">
+
+    <a href="/schedule/" rel="section"><i class="fa fa-calendar fa-fw"></i>日程表</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://ver0nical/2025/10/22/KG/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Ver0nical">
+      <meta itemprop="description" content="自此之后，有公义的冠冕为他留存">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="维罗妮卡小屋">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          知识图谱（Knowledge Graphs）入门知识整理
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2025-10-22 10:19:50 / 修改时间：14:04:39" itemprop="dateCreated datePublished" datetime="2025-10-22T10:19:50+08:00">2025-10-22</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%9F%A5%E8%AF%86%E6%80%BB%E7%BB%93/" itemprop="url" rel="index"><span itemprop="name">知识总结</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>5.1k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>5 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>内容整理：<a target="_blank" rel="noopener" href="https://github.com/Ver0nical">Ver0nical</a></p>
+<h2 id="KGs"><a href="#KGs" class="headerlink" title="KGs"></a>KGs</h2><h3 id="Consist"><a href="#Consist" class="headerlink" title="Consist"></a>Consist</h3><ul>
+<li>Nodes (Entities) (节点 &#x2F; 实体)</li>
+<li>Edges (边)</li>
+<li>Attributes (属性)</li>
+</ul>
+<h3 id="KGC-知识图谱补全"><a href="#KGC-知识图谱补全" class="headerlink" title="KGC (知识图谱补全)"></a>KGC (知识图谱补全)</h3><h4 id="Transductive-传递式"><a href="#Transductive-传递式" class="headerlink" title="Transductive (传递式)"></a>Transductive (传递式)</h4><h5 id="Rule-based-reasoning-基于规则的推理"><a href="#Rule-based-reasoning-基于规则的推理" class="headerlink" title="Rule-based reasoning (基于规则的推理)"></a>Rule-based reasoning (基于规则的推理)</h5><ul>
+<li>Horn rules (霍恩规则)</li>
+<li>Rely on explicit IF-THEN statements defined by human experts or learned from data</li>
+</ul>
+<blockquote>
+<p>依赖于由专家定义的明确的“如果-那么”规则，或者从数据中学习得来</p>
+</blockquote>
+<span id="more"></span>
+
+<h5 id="Knowledge-Graph-Embedding-KGE-知识图谱嵌入"><a href="#Knowledge-Graph-Embedding-KGE-知识图谱嵌入" class="headerlink" title="Knowledge Graph Embedding, KGE (知识图谱嵌入)"></a>Knowledge Graph Embedding, KGE (知识图谱嵌入)</h5><ul>
+<li>Map every entity and relationship in the KG into a huge, multi-dimensional mathematical space</li>
+<li>Concepts with similar semantics have coordinates close to each other</li>
+<li>Taking the TransE model as an example, head + relation ≈ tail</li>
+<li>Train on a fixed, known set of entities and relations, assume that all entities that need to be reasoned about are known during training</li>
+</ul>
+<blockquote>
+<p>将知识图谱中的每个实体和关系映射到一个庞大、多维的数学空间中</p>
+<p>具有相似语义的概念在空间中的坐标接近</p>
+<p>以TransE模型为例，头实体 + 关系 ≈ 尾实体</p>
+<p>在固定的已知实体和关系集上训练，假设所有需要推理的实体在训练过程中都是已知的</p>
+</blockquote>
+<h4 id="Inductive-归纳式"><a href="#Inductive-归纳式" class="headerlink" title="Inductive (归纳式)"></a>Inductive (归纳式)</h4><h5 id="Rationale-and-effectiveness-of-today’s-main-methods"><a href="#Rationale-and-effectiveness-of-today’s-main-methods" class="headerlink" title="Rationale and effectiveness of today’s main methods"></a>Rationale and effectiveness of today’s main methods</h5><ul>
+<li><p>KGE</p>
+<ul>
+<li>为每个实体和关系学习一个低维向量。定义一个评分函数 (Score Function) f(h, r, t)，用于衡量三元组 (h, r, t) 的合理性。对于存在的事实，评分应该高；对于不存在的事实，评分应该低。训练的目标就是最大化所有正确三元组的评分。</li>
+<li>推理过程：当需要预测 (h, r, ?) 时，模型会计算所有候选实体 e 作为尾实体时的评分 f(h, r, e)，然后选择评分最高的实体作为预测结果。</li>
+</ul>
+</li>
+<li><p>GNN</p>
+<ul>
+<li>GNN 的核心是消息传递机制。每个节点（实体）的表示是通过迭代地聚合其邻居节点和边的信息来更新的。对于知识图谱，这个过程需要区分不同类型的关系。</li>
+<li>经过多层 GNN 后，每个实体都获得了融合其多跳邻域结构信息的丰富表示。然后，这些最终的实体表示可以被送入一个类似于 KGE 的评分函数中进行链接预测。</li>
+<li>GNN 模型通常能取得比传统 KGE 模型更好的效果，因为它们显式地利用了图的拓扑结构，而不仅仅是单个三元组。</li>
+</ul>
+</li>
+</ul>
+<h5 id="Why-use-LLMs"><a href="#Why-use-LLMs" class="headerlink" title="Why use LLMs"></a>Why use LLMs</h5><ul>
+<li>LLM does not need to pre-learn a fixed embedding vector and can directly understand an entity name itself and its related text description</li>
+<li>The attributes and potential relationships of an entity can be dynamically and instantly inferred based on its literal meaning and description</li>
+<li>This ability to reason with text semantics is the core of LLM’s ability to perform zero-shot or few-shot inductive knowledge graph completion</li>
+</ul>
+<blockquote>
+<p>大语言模型无需预先学习固定的嵌入向量，可以直接理解实体名称及其相关的文本描述</p>
+<p>实体的属性和潜在关系可以基于其字面意义和描述动态地即时推断出来</p>
+<p>这种基于文本语义推理的能力是大语言模型在零样本或少样本情况下进行知识图谱补全的核心能力</p>
+</blockquote>
+<h5 id="Ways"><a href="#Ways" class="headerlink" title="Ways"></a>Ways</h5><ol>
+<li><p>Feature Enhancement (特征增强)</p>
+<ul>
+<li>LLM’s powerful text encoding capabilities are used to generate high-quality initial feature representations (initial embeddings) for entities in the KG</li>
+<li>Convert each entity (whether old or new) into a descriptive text. Input this text into a pre-trained LLM (such as BERT or GPT series) and extract its output vector representation as the initial feature of the entity</li>
+<li>These semantically rich feature vectors generated by LLM are fed as input to a graph neural network (GNN) or other KGC model. GNN then propagates this information on the graph structure and combines structured data for final link prediction</li>
+</ul>
+<blockquote>
+<p>使用大语言模型强大的文本编码能力生成知识图谱中实体的高质量初始特征表示（初始嵌入向量），特别是新实体</p>
+<p>将每个实体（无论是新实体还是旧实体）转换为描述性文本，输入到预训练的大语言模型（如BERT或GPT系列）中，并提取其输出向量表示作为实体的初始特征</p>
+<p>这些由大语言模型生成的语义丰富的特征向量被输入到图神经网络（GNN）或其他知识图谱补全模型中，GNN随后在图结构上传播这些信息，并结合结构化数据进行最终的链接预测</p>
+</blockquote>
+</li>
+<li><p>Direct Inference (直接推理)</p>
+<ul>
+<li>Try to completely bypass the traditional KGC model and directly use the powerful reasoning ability of the LLMs to complete link prediction</li>
+<li>Convert a knowledge triple that needs to be predicted into a natural language question</li>
+<li>The text answers generated by LLM are aligned with existing entities in the KG to ensure the standardization of knowledge</li>
+<li>Few-Shot In-Context Learning: To help LLM better understand the task intent and answer format, several complete examples are included in the prompts</li>
+<li>Chain-of-Thought Prompting: For tasks that require multi-step reasoning, guide LLM to output the reasoning steps first and then give the final answer</li>
+</ul>
+<blockquote>
+<p>尽量完全绕过传统的知识图谱补全模型，直接利用大语言模型的强大推理能力来完成链接预测</p>
+<p>将需要预测的知识三元组转换为自然语言问题</p>
+<p>大语言模型生成的文本答案与知识图谱中的现有实体对齐，以确保知识的标准化</p>
+<p>少样本上下文学习：为了帮助大语言模型更好地理解任务意图和回答格式，提示中包括几个完整的示例</p>
+<p>思维链提示：对于需要多步骤推理的任务，引导大语言模型先输出推理步骤，然后给出最终答案</p>
+</blockquote>
+</li>
+<li><p>Domain-Specific Fine-tuning</p>
+<ul>
+<li>Convert valid triples in the KG into a large number of question-answer pairs</li>
+<li>Use these question-answer pairs to fine-tune the LLM, allowing the model to learn the schema, entity naming conventions, and domain knowledge unique to the KG</li>
+</ul>
+<blockquote>
+<p>将知识图谱中的有效三元组转换为大量的问答对</p>
+<p>使用这些问答对来微调大语言模型，使模型能够学习知识图谱特有的模式、实体命名规范以及领域知识</p>
+</blockquote>
+</li>
+</ol>
+<h2 id="Combining-KGs-and-LLMs"><a href="#Combining-KGs-and-LLMs" class="headerlink" title="Combining KGs and LLMs"></a>Combining KGs and LLMs</h2><h3 id="Why"><a href="#Why" class="headerlink" title="Why"></a>Why</h3><ul>
+<li>KGs inject structured, verifiable, factually accurate and updatable knowledge into LLMs</li>
+<li>LLMs empower KGs with natural language interaction capabilities</li>
+</ul>
+<blockquote>
+<p>知识图谱将结构化、可验证、事实准确且可更新的知识注入大语言模型</p>
+<p>大语言模型赋予知识图谱自然语言交互能力</p>
+</blockquote>
+<h3 id="KG-Enhanced-LLMs"><a href="#KG-Enhanced-LLMs" class="headerlink" title="KG-Enhanced LLMs"></a>KG-Enhanced LLMs</h3><ul>
+<li>Before LLM generates answers, it first retrieves relevant information from the KG to enhance its capabilities</li>
+<li>Key technologies: Retrieval-Augmented Generation, RAG, means before answering the question, the most relevant information is retrieved from an external knowledge base and provided to the LLM as context</li>
+</ul>
+<blockquote>
+<p>在大语言模型生成答案之前，它首先从知识图谱中检索相关信息来增强其能力</p>
+<p>关键技术：检索增强生成，RAG，意思是在回答问题之前，从外部知识库中检索最相关的信息，并将其提供给大语言模型作为上下文</p>
+</blockquote>
+<h3 id="LLM-Augmented-KGs"><a href="#LLM-Augmented-KGs" class="headerlink" title="LLM-Augmented KGs"></a>LLM-Augmented KGs</h3><ul>
+<li>LLM can read massive amounts of unstructured text and automatically perform entity extraction and relationship extraction, and then convert this information into structured triples (SPO) that are directly used to populate the KG. This greatly reduces the threshold and cost of building a KG from scratch</li>
+<li>Leveraging its vast background knowledge, LLM can predict and supplement missing links or attributes in existing KGs to make them more complete</li>
+<li>Natural Language Querying, NLQ (自然语言查询)</li>
+</ul>
+<blockquote>
+<p>大语言模型可以读取大量的非结构化文本，自动执行实体提取和关系提取，然后将这些信息转换为直接用于填充知识图谱的结构化三元组（SPO）。这大大降低了从头构建知识图谱的门槛和成本</p>
+<p>凭借其广泛的背景知识，大语言模型可以预测并补充现有知识图谱中缺失的链接或属性，从而使其更加完整</p>
+</blockquote>
+<h3 id="Neuro-Symbolic-AI"><a href="#Neuro-Symbolic-AI" class="headerlink" title="Neuro-Symbolic AI"></a>Neuro-Symbolic AI</h3><ul>
+<li>The neural network system (LLM) and the symbolic system (KG) are no longer simply data transmission relationships, but are deeply integrated into a unified and collaborative reasoning framework</li>
+<li>LLM will first make a preliminary query to the KG, make preliminary inferences on the returned results, and then determine that the information is insufficient, so it will autonomously form a new, more precise query and access the KG again, and so on</li>
+</ul>
+<blockquote>
+<p>神经网络系统（大语言模型）和符号系统（知识图谱）不再只是数据传输关系，而是深度融合成统一的协同推理框架</p>
+<p>大语言模型首先向知识图谱发出初步查询，对返回的结果进行初步推理，然后判断信息不足，因此会自主形成新的、更精确的查询，再次访问知识图谱，依此类推</p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Ver0nical
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://ver0nical/2025/10/22/KG/" title="知识图谱（Knowledge Graphs）入门知识整理">http://ver0nical/2025/10/22/KG/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/KGs/" rel="tag"># KGs</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2025/10/22/%E7%9F%A5%E8%AF%86%E5%9B%BE%E8%B0%B1%E9%A9%B1%E5%8A%A8%E7%9A%84%E6%A3%80%E7%B4%A2%E5%A2%9E%E5%BC%BA%E7%94%9F%E6%88%90%E7%A0%94%E7%A9%B6/" rel="prev" title="知识图谱驱动的检索增强生成">
+      <i class="fa fa-chevron-left"></i> 知识图谱驱动的检索增强生成
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#KGs"><span class="nav-number">1.</span> <span class="nav-text">KGs</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Consist"><span class="nav-number">1.1.</span> <span class="nav-text">Consist</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#KGC-%E7%9F%A5%E8%AF%86%E5%9B%BE%E8%B0%B1%E8%A1%A5%E5%85%A8"><span class="nav-number">1.2.</span> <span class="nav-text">KGC (知识图谱补全)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Transductive-%E4%BC%A0%E9%80%92%E5%BC%8F"><span class="nav-number">1.2.1.</span> <span class="nav-text">Transductive (传递式)</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Rule-based-reasoning-%E5%9F%BA%E4%BA%8E%E8%A7%84%E5%88%99%E7%9A%84%E6%8E%A8%E7%90%86"><span class="nav-number">1.2.1.1.</span> <span class="nav-text">Rule-based reasoning (基于规则的推理)</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Knowledge-Graph-Embedding-KGE-%E7%9F%A5%E8%AF%86%E5%9B%BE%E8%B0%B1%E5%B5%8C%E5%85%A5"><span class="nav-number">1.2.1.2.</span> <span class="nav-text">Knowledge Graph Embedding, KGE (知识图谱嵌入)</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Inductive-%E5%BD%92%E7%BA%B3%E5%BC%8F"><span class="nav-number">1.2.2.</span> <span class="nav-text">Inductive (归纳式)</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Rationale-and-effectiveness-of-today%E2%80%99s-main-methods"><span class="nav-number">1.2.2.1.</span> <span class="nav-text">Rationale and effectiveness of today’s main methods</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Why-use-LLMs"><span class="nav-number">1.2.2.2.</span> <span class="nav-text">Why use LLMs</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Ways"><span class="nav-number">1.2.2.3.</span> <span class="nav-text">Ways</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Combining-KGs-and-LLMs"><span class="nav-number">2.</span> <span class="nav-text">Combining KGs and LLMs</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Why"><span class="nav-number">2.1.</span> <span class="nav-text">Why</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#KG-Enhanced-LLMs"><span class="nav-number">2.2.</span> <span class="nav-text">KG-Enhanced LLMs</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LLM-Augmented-KGs"><span class="nav-number">2.3.</span> <span class="nav-text">LLM-Augmented KGs</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Neuro-Symbolic-AI"><span class="nav-number">2.4.</span> <span class="nav-text">Neuro-Symbolic AI</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Ver0nical"
+      src="/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">Ver0nical</p>
+  <div class="site-description" itemprop="description">自此之后，有公义的冠冕为他留存</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">3</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Ver0nical</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">19k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">17 分钟</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+  <script defer src="/lib/three/three.min.js"></script>
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
