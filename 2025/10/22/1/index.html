@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 8.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"ver0nical","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="内容来源：arxiv; github^1 整理翻译：Ver0nical 检索增强生成（RAG）已证明其能够通过整合外部知识源来增强大型语言模型（LLMs）。然而，多跳问题需要识别多个知识目标以形成综合答案，这给 RAG 系统带来了新的挑战。 在多跳设置下，现有方法往往难以充分理解具有复杂语义结构的问题，并且在检索多个信息目标时容易受到无关噪声的影响。 本篇论文聚焦于多跳场景下尤其是高跳数问题上的解">
+<meta property="og:type" content="article">
+<meta property="og:title" content="《查询特定图神经网络：一种用于检索增强生成的全面图表表示学习方法》的导读及总结">
+<meta property="og:url" content="http://ver0nical/2025/10/22/1/index.html">
+<meta property="og:site_name" content="维罗妮卡小屋">
+<meta property="og:description" content="内容来源：arxiv; github^1 整理翻译：Ver0nical 检索增强生成（RAG）已证明其能够通过整合外部知识源来增强大型语言模型（LLMs）。然而，多跳问题需要识别多个知识目标以形成综合答案，这给 RAG 系统带来了新的挑战。 在多跳设置下，现有方法往往难以充分理解具有复杂语义结构的问题，并且在检索多个信息目标时容易受到无关噪声的影响。 本篇论文聚焦于多跳场景下尤其是高跳数问题上的解">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-10-22T09:53:46.209Z">
+<meta property="article:modified_time" content="2025-10-22T17:33:31.769Z">
+<meta property="article:author" content="Ver0nical">
+<meta property="article:tag" content="GNN">
+<meta property="article:tag" content="KGs">
+<meta property="article:tag" content="RAG">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://ver0nical/2025/10/22/1/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>《查询特定图神经网络：一种用于检索增强生成的全面图表表示学习方法》的导读及总结 | 维罗妮卡小屋</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">维罗妮卡小屋</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-schedule">
+
+    <a href="/schedule/" rel="section"><i class="fa fa-calendar fa-fw"></i>日程表</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://ver0nical/2025/10/22/1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Ver0nical">
+      <meta itemprop="description" content="自此之后，有公义的冠冕为他留存">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="维罗妮卡小屋">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          《查询特定图神经网络：一种用于检索增强生成的全面图表表示学习方法》的导读及总结
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2025-10-22 17:53:46" itemprop="dateCreated datePublished" datetime="2025-10-22T17:53:46+08:00">2025-10-22</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2025-10-23 01:33:31" itemprop="dateModified" datetime="2025-10-23T01:33:31+08:00">2025-10-23</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>18k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>16 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>内容来源：<a target="_blank" rel="noopener" href="https://arxiv.org/abs/2510.11541">arxiv</a>; <a target="_blank" rel="noopener" href="https://github.com/Jerry2398/QSGNN">github</a><a href="%E9%A1%B9%E7%9B%AE%E6%BA%90%E7%A0%81%E5%9C%B0%E5%9D%80%E3%80%82">^1</a></p>
+<p>整理翻译：<a target="_blank" rel="noopener" href="https://github.com/Ver0nical">Ver0nical</a></p>
+<p>检索增强生成（RAG）已证明其能够通过整合外部知识源来增强大型语言模型（LLMs）。然而，多跳问题需要识别多个知识目标以形成综合答案，这给 RAG 系统带来了新的挑战。</p>
+<p>在多跳设置下，现有方法往往难以充分理解具有复杂语义结构的问题，并且在检索多个信息目标时容易受到无关噪声的影响。</p>
+<p>本篇论文聚焦于多跳场景下尤其是高跳数问题上的解决方案，对笔者理解如何更好的聚合KGs上的信息有较大帮助。</p>
+<span id="more"></span>
+
+<h2 id="个人分析"><a href="#个人分析" class="headerlink" title="个人分析"></a>个人分析</h2><h3 id="个人总结"><a href="#个人总结" class="headerlink" title="个人总结"></a>个人总结</h3><h4 id="文章本身"><a href="#文章本身" class="headerlink" title="文章本身"></a>文章本身</h4><p>这是一篇高质量、具有显著创新性和实用价值的研究论文。它在解决RAG系统处理复杂多跳问题这一关键挑战上，提出了一个系统性的、有效的解决方案。</p>
+<p>优点：</p>
+<ul>
+<li>创新性突出： 提出的“多信息层级知识图谱”和“查询特定图神经网络”是两个核心创新点，直击现有方法的痛点。</li>
+<li>技术扎实： 方法设计严谨，结合了图表示学习、注意力机制和对比学习等前沿技术，并形成了完整的框架（从图谱构建、模型设计到训练策略）。</li>
+<li>实验充分： 在三个公认的多跳问答基准数据集上进行了广泛的实验，与四大类基线方法进行了对比，并包含了详尽的消融实验、效率分析和案例研究，结论令人信服。</li>
+<li>效果显著： 实验结果表明，该方法尤其在最具挑战性的高跳数问题上取得了突破性进展（如4-hop问题提升33.8%），证明了其优越性。</li>
+<li>可复现性强： 论文提供了代码链接，并详细描述了数据集构建、超参数设置等细节，符合优秀学术论文的规范。</li>
+</ul>
+<p>局限性（论文已诚实指出）：</p>
+<ul>
+<li>对查询中的术语拼写错误和极其罕见的专有名词敏感。</li>
+<li>当关键证据被大量“部分相关但非支持性”的文档淹没时，检索会变得困难。</li>
+<li>Multi-L KG的构建和QSGNN的推理需要一定的计算开销</li>
+</ul>
+<p><em><strong>笔者语：对文章阅读和理解比较有挑战性</strong></em></p>
+<h4 id="对于笔者的研究方向"><a href="#对于笔者的研究方向" class="headerlink" title="对于笔者的研究方向"></a>对于笔者的研究方向</h4><p>这篇论文虽然主要聚焦于提升多跳问答的检索能力，但其方法论和思想对利用知识图谱解决大模型幻觉问题提供了宝贵的帮助和启示。</p>
+<p><strong>上下文消歧：</strong> 通过实体-块和实体-文档关系，模型能更好地理解“Apple”是公司还是水果，从而避免基于错误上下文生成答案。</p>
+<p><strong>证据链完整性：</strong> 块层级保留了自然语言的表达方式，可以捕捉那些无法用离散实体完美表述的复杂概念和描述（如“一款革命性的可折叠手机概念”），为答案提供了更完整的证据支撑，减少了模型“瞎猜”的可能。</p>
+<p><strong>直接减少噪声输入：</strong> 这是对抗幻觉的第一道也是最关键的防线。通过确保输入到大模型的上下文是高度纯净和相关的，从根本上降低了模型被误导的概率。论文中高跳问题性能的大幅提升，直接证明了其强大的噪声过滤能力。</p>
+<p><strong>理解关系而非仅仅关键词：</strong> 通过图神经网络的消息传递，QSGNN学习到的是节点在网络结构中的表示，而不仅仅是文本相似度。这使其能够更好地理解“A是B的子公司”这类关系逻辑，从而检索出真正具有逻辑支持作用的文档，而不是仅仅包含相同关键词的文档。</p>
+<h3 id="原文内容详解"><a href="#原文内容详解" class="headerlink" title="原文内容详解"></a>原文内容详解</h3><h4 id="1-为什么要解决多跳问题？"><a href="#1-为什么要解决多跳问题？" class="headerlink" title="1. 为什么要解决多跳问题？"></a>1. 为什么要解决多跳问题？</h4><h5 id="1-1-什么是多跳问题？"><a href="#1-1-什么是多跳问题？" class="headerlink" title="1.1 什么是多跳问题？"></a>1.1 什么是多跳问题？</h5><p>现实例子：”乔教授对2023年苹果发布会上展示的可折叠手机概念有什么看法？”</p>
+<ul>
+<li>需要找到：乔教授的资料 + 苹果发布会信息 + 可折叠手机概念</li>
+<li>而且”苹果”可能是公司也可能是水果，需要区分</li>
+</ul>
+<h5 id="1-2-传统方法的局限性"><a href="#1-2-传统方法的局限性" class="headerlink" title="1.2 传统方法的局限性"></a>1.2 传统方法的局限性</h5><p>传统搜索就像只用关键词匹配：</p>
+<ul>
+<li>输入”苹果 发布会 可折叠手机”</li>
+<li>可能找到：<ul>
+<li>关于水果苹果的文章 ❌</li>
+<li>苹果公司发布会的新闻 ✅</li>
+<li>但可能漏掉关键细节 ❌</li>
+</ul>
+</li>
+</ul>
+<p><strong>问题根源：</strong></p>
+<ul>
+<li>传统方法只看单个文档的相关性，不考虑文档之间的关系。</li>
+</ul>
+<h4 id="2-Multi-L-KG：构建知识”地图”"><a href="#2-Multi-L-KG：构建知识”地图”" class="headerlink" title="2. Multi-L KG：构建知识”地图”"></a>2. Multi-L KG：构建知识”地图”</h4><h5 id="2-1-具体构建过程"><a href="#2-1-具体构建过程" class="headerlink" title="2.1 具体构建过程"></a>2.1 具体构建过程</h5><p><strong>第一步：提取”知识点”（节点提取）</strong><br>就像从书中摘录重要信息：</p>
+<ol>
+<li>文档 → 整本书</li>
+<li>块 → 书中的重要句子<ul>
+<li>“苹果公司于2023年9月发布了可折叠手机概念”</li>
+</ul>
+</li>
+<li>实体 → 句子中的关键名词<ul>
+<li>苹果公司、2023年9月、可折叠手机</li>
+</ul>
+</li>
+</ol>
+<p><strong>技术实现：</strong></p>
+<ul>
+<li>使用OpenIE工具自动提取</li>
+<li>从句子中抽取出（主语，关系，宾语）的三元组</li>
+</ul>
+<p><strong>第二步：建立”联系”（关系构建）</strong><br>就像用线把相关知识点连起来：</p>
+<ol>
+<li>实体-实体关系（E_oo）<ul>
+<li>“苹果公司” → “发布” → “可折叠手机”</li>
+<li>基于提取的三元组直接建立</li>
+</ul>
+</li>
+<li>块-块关系（E_cc）<ul>
+<li>连接同一文档中相邻的句子</li>
+<li>因为相邻句子通常逻辑连贯</li>
+</ul>
+</li>
+<li>跨层级关系<ul>
+<li>实体-块（E_oc）：实体出现在哪个句子中</li>
+<li>实体-文档（E_od）：实体出现在哪个文档中</li>
+<li>块-文档（E_cd）：句子属于哪个文档</li>
+</ul>
+</li>
+</ol>
+<h5 id="2-2-为什么要这样设计？"><a href="#2-2-为什么要这样设计？" class="headerlink" title="2.2 为什么要这样设计？"></a>2.2 为什么要这样设计？</h5><p>解决传统方法的两个痛点：</p>
+<ol>
+<li>语义理解不全面<ul>
+<li>传统：只看实体”苹果”</li>
+<li>Multi-L KG：能看到”苹果”在不同上下文中的含义<ul>
+<li>作为公司：在商业文档中</li>
+<li>作为水果：在农业文档中</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>信息粒度单一<ul>
+<li>传统：要么只看词，要么只看整篇文档</li>
+<li>Multi-L KG：词、句子、文档三个层次都能看</li>
+</ul>
+</li>
+</ol>
+<h4 id="3-QSGNN：智能的”信息导航员”"><a href="#3-QSGNN：智能的”信息导航员”" class="headerlink" title="3. QSGNN：智能的”信息导航员”"></a>3. QSGNN：智能的”信息导航员”</h4><h5 id="3-1-传统图神经网络的局限性"><a href="#3-1-传统图神经网络的局限性" class="headerlink" title="3.1 传统图神经网络的局限性"></a>3.1 传统图神经网络的局限性</h5><p><strong>想象一个社交网络：</strong></p>
+<ul>
+<li>传统GNN：把每个人的朋友信息都混在一起</li>
+<li>问题：当你问”谁喜欢篮球”时，会把不喜欢篮球的朋友信息也混进来</li>
+</ul>
+<h5 id="3-2-QSGNN的创新：查询引导"><a href="#3-2-QSGNN的创新：查询引导" class="headerlink" title="3.2 QSGNN的创新：查询引导"></a>3.2 QSGNN的创新：查询引导</h5><p>核心思想：<strong>带着问题找答案</strong></p>
+<h6 id="层内消息传递（同层级信息整合）"><a href="#层内消息传递（同层级信息整合）" class="headerlink" title="层内消息传递（同层级信息整合）"></a>层内消息传递（同层级信息整合）</h6><p>对于每个”人”（节点），询问：</p>
+<ol>
+<li>你的朋友中，谁跟当前问题最相关？（语义相似性 α）</li>
+<li>你和这个朋友的关系，跟问题匹配吗？（查询对齐 β）</li>
+</ol>
+<p><strong>具体计算过程（通俗解释）：</strong></p>
+<ol>
+<li><p><strong>计算注意力权重</strong><br> 总权重 &#x3D; 语义相似度 + 查询对齐度<br> 语义相似度：这个邻居本身跟当前节点像不像<br> 查询对齐度：这个邻居关系跟用户问题相不相关</p>
+</li>
+<li><p><strong>加权聚合信息</strong><br> 新信息 &#x3D; 所有邻居信息 × 对应的注意力权重</p>
+</li>
+<li><p><strong>更新节点表示</strong><br> 新表示 &#x3D; 原来的表示 + 处理后的新信息</p>
+</li>
+</ol>
+<h6 id="层间消息传递（跨层级信息整合）"><a href="#层间消息传递（跨层级信息整合）" class="headerlink" title="层间消息传递（跨层级信息整合）"></a>层间消息传递（跨层级信息整合）</h6><p><strong>就像从细节到整体的理解：</strong></p>
+<ul>
+<li><strong>从实体到块</strong>：知道”苹果”在这个句子中是公司</li>
+<li><strong>从块到文档</strong>：知道这个句子在整个文档中的重要性</li>
+<li><strong>从文档到块</strong>：知道文档主题如何影响句子理解</li>
+</ul>
+<h5 id="3-3-为什么查询引导很重要？"><a href="#3-3-为什么查询引导很重要？" class="headerlink" title="3.3 为什么查询引导很重要？"></a>3.3 为什么查询引导很重要？</h5><p><strong>多跳问题的”噪声放大”效应：</strong></p>
+<p>假设要找4个相关文档：</p>
+<ul>
+<li>第1步：找到10个可能相关文档（包含2个真正相关的）</li>
+<li>第2步：从这10个文档扩展，找到100个（包含4个真正相关的）</li>
+<li>第3步：从100个扩展到1000个…</li>
+<li><strong>问题</strong>：不相关信息指数级增长！</li>
+</ul>
+<p><strong>QSGNN的解决方案：</strong><br>每一步都检查”这个信息跟我的问题相关吗？”，及时过滤掉不相关信息。</p>
+<h4 id="4-训练策略：先”模拟考试”再”真实考试”"><a href="#4-训练策略：先”模拟考试”再”真实考试”" class="headerlink" title="4. 训练策略：先”模拟考试”再”真实考试”"></a>4. 训练策略：先”模拟考试”再”真实考试”</h4><h5 id="4-1-为什么需要预训练？"><a href="#4-1-为什么需要预训练？" class="headerlink" title="4.1 为什么需要预训练？"></a>4.1 为什么需要预训练？</h5><p><strong>人工标注成本太高：</strong></p>
+<ul>
+<li>标注一个多跳问题需要专家看多个文档</li>
+<li>耗时耗力，数据量有限</li>
+</ul>
+<h5 id="4-2-合成数据生成：自动出题"><a href="#4-2-合成数据生成：自动出题" class="headerlink" title="4.2 合成数据生成：自动出题"></a>4.2 合成数据生成：自动出题</h5><h6 id="单跳问题生成"><a href="#单跳问题生成" class="headerlink" title="单跳问题生成"></a>单跳问题生成</h6><p><strong>从三元组直接生成：</strong></p>
+<ul>
+<li>输入：（苹果公司，发布，iPhone 15）</li>
+<li>生成问题：”什么公司发布了iPhone 15？” → 答案：苹果公司</li>
+<li>或者：”苹果公司发布了什么？” → 答案：iPhone 15</li>
+</ul>
+<h6 id="双跳问题生成"><a href="#双跳问题生成" class="headerlink" title="双跳问题生成"></a>双跳问题生成</h6><p><strong>连接两个相关三元组：</strong></p>
+<ul>
+<li>三元组1：（苹果公司，位于，加州）</li>
+<li>三元组2：（加州，首府，萨克拉门托）</li>
+<li>生成问题：”苹果公司所在州的首府是哪里？”</li>
+<li>答案：萨克拉门托</li>
+</ul>
+<h5 id="4-3-训练目标：学会”找对文档”"><a href="#4-3-训练目标：学会”找对文档”" class="headerlink" title="4.3 训练目标：学会”找对文档”"></a>4.3 训练目标：学会”找对文档”</h5><p><strong>对比学习思想：</strong></p>
+<ul>
+<li><strong>正样本</strong>：问题对应的正确答案文档</li>
+<li><strong>负样本</strong>：其他不相关的文档</li>
+<li><strong>目标</strong>：让模型学会把问题和正确答案拉近，和错误答案推远</li>
+</ul>
+<h5 id="4-4-两阶段训练的好处"><a href="#4-4-两阶段训练的好处" class="headerlink" title="4.4 两阶段训练的好处"></a>4.4 两阶段训练的好处</h5><ol>
+<li><strong>预训练阶段</strong>：大量”模拟题”，学会基本模式</li>
+<li><strong>微调阶段</strong>：少量”真题”，针对性提升</li>
+</ol>
+<h4 id="5-检索与生成：最终答案的产生"><a href="#5-检索与生成：最终答案的产生" class="headerlink" title="5. 检索与生成：最终答案的产生"></a>5. 检索与生成：最终答案的产生</h4><h5 id="5-1-检索过程"><a href="#5-1-检索过程" class="headerlink" title="5.1 检索过程"></a>5.1 检索过程</h5><p>用户提问 → 转换成数学表示（嵌入）</p>
+<p>在知识图谱中计算每个文档与问题的相似度</p>
+<p>选择最相似的K个文档</p>
+<h5 id="5-2-生成过程"><a href="#5-2-生成过程" class="headerlink" title="5.2 生成过程"></a>5.2 生成过程</h5><p>把检索到的文档作为背景知识 + 用户问题 → 大语言模型 → 生成答案</p>
+<h3 id="原文创新分析"><a href="#原文创新分析" class="headerlink" title="原文创新分析"></a>原文创新分析</h3><h4 id="技术难点与解决方案总结"><a href="#技术难点与解决方案总结" class="headerlink" title="技术难点与解决方案总结"></a>技术难点与解决方案总结</h4><h5 id="难点1：信息过载"><a href="#难点1：信息过载" class="headerlink" title="难点1：信息过载"></a>难点1：信息过载</h5><ul>
+<li><strong>问题</strong>：知识图谱太大，包含太多不相关信息</li>
+<li><strong>解决方案</strong>：查询引导的注意力机制，动态聚焦相关信息</li>
+</ul>
+<h5 id="难点2：语义歧义"><a href="#难点2：语义歧义" class="headerlink" title="难点2：语义歧义"></a>难点2：语义歧义</h5><ul>
+<li><strong>问题</strong>：同一个词在不同上下文意思不同</li>
+<li><strong>解决方案</strong>：多层级表示，结合局部和全局信息</li>
+</ul>
+<h5 id="难点3：训练数据稀缺"><a href="#难点3：训练数据稀缺" class="headerlink" title="难点3：训练数据稀缺"></a>难点3：训练数据稀缺</h5><ul>
+<li><strong>问题</strong>：多跳问题标注成本高</li>
+<li><strong>解决方案</strong>：合成数据预训练 + 少量人工数据微调</li>
+</ul>
+<h5 id="难点4：错误累积"><a href="#难点4：错误累积" class="headerlink" title="难点4：错误累积"></a>难点4：错误累积</h5><ul>
+<li><strong>问题</strong>：多步检索中，前一步错误会影响后续步骤</li>
+<li><strong>解决方案</strong>：端到端训练，整体优化检索质量</li>
+</ul>
+<h4 id="通俗类比：侦探破案过程"><a href="#通俗类比：侦探破案过程" class="headerlink" title="通俗类比：侦探破案过程"></a>通俗类比：侦探破案过程</h4><p><strong>传统方法</strong>：</p>
+<ul>
+<li>像新手侦探，只看单个线索</li>
+<li>容易错过关键联系</li>
+</ul>
+<p><strong>QSGNN方法</strong>：</p>
+<ul>
+<li>像经验丰富的侦探：<ol>
+<li><strong>建立线索网</strong>（Multi-L KG）：整理所有线索和关系</li>
+<li><strong>针对性调查</strong>（查询引导）：根据当前问题重点排查相关线索</li>
+<li><strong>综合分析</strong>（消息传递）：结合细节线索和整体背景</li>
+<li><strong>得出结论</strong>（检索生成）：基于所有证据给出答案</li>
+</ol>
+</li>
+</ul>
+<h2 id="原文导读"><a href="#原文导读" class="headerlink" title="原文导读"></a>原文导读</h2><h3 id="一-背景"><a href="#一-背景" class="headerlink" title="一.背景"></a>一.背景</h3><p><strong>By retrieving pertinent information from external knowledge sources and integrating it into the generation process, RAG enables LLMs to ground their responses in factual information, significantly reducing the propensity for hallucinations (Fan et al. 2024).</strong><br>通过从外部知识源检索相关信息并将其整合到生成过程中，RAG 使得 LLMs 能够将其回答建立在事实信息的基础上，从而显著减少幻觉倾向。</p>
+<p><strong>A challenging scenario in RAG is handling multi-hop questions, where the answer cannot be directly supported by a single document but requires information synthesized from multiple interrelated documents, each contributing a unique piece of the puzzle for the answer (Dua et al. 2019; Chen et al. 2019.)</strong><br>RAG 中一个具有挑战性的场景是处理多跳问题，这类问题的答案无法直接由单个文档支持，而是需要从多个相互关联的文档中综合信息，每个文档为答案贡献一个独特的拼图。</p>
+<p><strong>To overcome this limitation, recent efforts have proposed to leverage Knowledge Graphs (KGs).</strong><br>为了克服这一局限性，近期的研究提出利用知识图谱（KGs）。</p>
+<p><strong>These methods first construct KGs to model the relationships between documents.</strong><br>这些方法首先构建 KGs 来建模文档之间的关系。</p>
+<p><strong>During retrieval stage, they either navigate the KGs using graph search strategies (Edge et al., 2024; Guo et al., 2024; Gutierrez et al., 2025) or utilize Graph Neural Networks (GNNs) (Fang et al., 2019; Mavromatis &amp; Karypis, 2024; Luo et al., 2025) to identify relevant information.</strong><br>在检索阶段，它们要么使用图搜索策略在 KGs 中导航，要么利用图神经网络（GNNs）来识别相关信息。</p>
+<p><strong>By using KGs, these approaches can better capture the dependencies between documents, thereby improving the retrieval process for multi-hop questions.</strong><br>通过使用 KGs，这些方法能够更好地捕捉文档间的依赖关系，从而改进多跳问题的检索过程。</p>
+<h3 id="二-挑战"><a href="#二-挑战" class="headerlink" title="二.挑战"></a>二.挑战</h3><p><strong>These challenges can be summarized as follows:</strong></p>
+<ul>
+<li><strong>i) Semantic Comprehensiveness.</strong></li>
+<li><strong>ii) Noise Sensitivity.</strong></li>
+</ul>
+<p>这些挑战可以总结如下：语义全面性；噪声敏感性。</p>
+<hr>
+<p><strong>Multi-hop questions are inherently more complex than one-hop questions from the semantic perspective, requiring a comprehensive understanding of diverse information components.</strong><br>从语义角度来看，多跳问题本质上比单跳问题更复杂，需要对多样化的信息组成部分有全面的理解。</p>
+<p><strong>Such questions not only require the retrieval process to understand context-dependent entities but also demand a full understanding of multi-granular information.</strong><br>这样的问题不仅要求检索过程理解依赖于上下文的实体，还要求对多粒度的信息有充分的理解。</p>
+<p><strong>However, existing methods primarily focus on entities while ignoring the contextual and multi-granular information.</strong><br>然而，现有方法主要关注实体，而忽略了上下文和多粒度信息。</p>
+<p><strong>This limitation may lead to the inclusion of irrelevant information or the loss of critical details, ultimately compromising the performance.</strong><br>这种局限性可能导致包含不相关的信息或丢失关键细节，最终影响性能。</p>
+<hr>
+<p><strong>The retrieval process for multi-hop questions is highly sensitive to noise since it has multiple retrieval targets.</strong><br>多跳问题的检索过程对噪声高度敏感，因为它有多个检索目标。</p>
+<p><strong>The noise in any one retrieval target will disrupt the final result.</strong><br>任何一个检索目标中的噪声都会破坏最终结果。</p>
+<p><strong>However, existing methods are mostly prone to noise influence.</strong><br>然而，现有方法大多容易受到噪声影响。</p>
+<p><strong>For instance, graph search based methods rely on heuristic strategies to explore relevant information, which is likely to incorporate irrelevant nodes or miss important information.</strong><br>例如，基于图搜索的方法依赖启发式策略来探索相关信息，这很可能引入不相关的节点或遗漏重要信息。</p>
+<p><strong>GNN based methods use message passing, which may also aggregate information from irrelevant neighbors.</strong><br>基于GNN的方法使用消息传递，这也可能聚合来自不相关邻居的信息。</p>
+<p><strong>Furthermore, the large search space of KG exacerbates this issue.</strong><br>此外，知识图谱巨大的搜索空间加剧了这个问题。</p>
+<p><strong>The performance of existing methods degrades significantly for high-hop questions, because the number of irrelevant nodes in the KG increases exponentially as the retrieval step increases.</strong><br>现有方法在高跳数问题上的性能显著下降，因为知识图谱中不相关节点的数量随着检索步数的增加呈指数级增长。</p>
+<hr>
+<h3 id="三-创新"><a href="#三-创新" class="headerlink" title="三.创新"></a>三.创新</h3><p>该论文指出其解决方案来自于以下创新点：</p>
+<ol>
+<li><strong>Multi-information Level Knowledge Graph (Multi-L KG)</strong></li>
+<li><strong>Query-Specific Graph Neural Network (QSGNN)</strong></li>
+<li><strong>Two data generation strategies to produce synthesized QA pairs for pre-training.</strong></li>
+</ol>
+<h3 id="四-方法"><a href="#四-方法" class="headerlink" title="四.方法"></a>四.方法</h3><h4 id="Multi-information-level-KG-Construction-多信息层级知识图谱构建"><a href="#Multi-information-level-KG-Construction-多信息层级知识图谱构建" class="headerlink" title="Multi-information level KG Construction 多信息层级知识图谱构建"></a>Multi-information level KG Construction 多信息层级知识图谱构建</h4><p>Multi-hop questions are inherently more semantically complex than one-hop questions, as they often encompass not only simple entities but also complex expressions whose meanings may extend beyond the coverage of entities within KGs.<br>多跳问题在语义上天生比单跳问题更复杂，因为它们通常不仅包含简单实体，还包含复杂表达，其含义可能超出知识图谱内实体的覆盖范围。</p>
+<p>Current approaches primarily focus on entities while neglect the multi-granular information, limiting their effectiveness in handling multi-hop questions.<br>当前方法主要关注实体而忽略了多粒度信息，限制了它们处理多跳问题的有效性。</p>
+<p>We define the Multi-L KG as $G&#x3D;(\mathcal{O},\mathcal{C},\mathcal{D},\mathcal{E}<em>{oo},\mathcal{E}</em>{oc},\mathcal{E}<em>{od},\mathcal{E}</em>{cc},\mathcal{E}<em>{cd})$.<br>我们将 Multi-L KG 定义为 $G&#x3D;(\mathcal{O},\mathcal{C},\mathcal{D},\mathcal{E}</em>{oo},\mathcal{E}<em>{oc},\mathcal{E}</em>{od},\mathcal{E}<em>{cc},\mathcal{E}</em>{cd})$。</p>
+<p>It contains three types of node sets: entity set $\mathcal{O}$, chunk set $\mathcal{C}$, document set $\mathcal{D}$ and five types of edge sets: entity-entity $\mathcal{E}<em>{oo}$, entity-chunk $\mathcal{E}</em>{oc}$, entity-document $\mathcal{E}<em>{od}$, chunk-chunk $\mathcal{E}</em>{cc}$, chunk-document $\mathcal{E}<em>{cd}$.<br>它包含三种节点集：实体集 $\mathcal{O}$、块集 $\mathcal{C}$、文档集 $\mathcal{D}$，以及五种边集：实体-实体 $\mathcal{E}</em>{oo}$、实体-块 $\mathcal{E}<em>{oc}$、实体-文档 $\mathcal{E}</em>{od}$、块-块 $\mathcal{E}<em>{cc}$、块-文档 $\mathcal{E}</em>{cd}$。</p>
+<hr>
+<p>Node Extraction.<br><strong>节点提取。</strong></p>
+<p>Given the document corpus $\mathcal{D}$, we utilize $OpenIE(\cdot)$(Angeli et al. 2015; Etzioni et al. 2008; Zhou et al. 2022)to extract chunks from each document and derive triples from these chunks.<br>给定文档语料库 $\mathcal{D}$，我们利用 $OpenIE(\cdot)$从每个文档中提取块，并从这些块中推导出三元组。</p>
+<p>The extraction process can be formalized as:<br>提取过程可以形式化地表示为：</p>
+<p>$$OpenIE(\mathcal{D})\rightarrow{(d_{i},\mathcal{C}<em>{d</em>{i}},\mathcal{T}<em>{d</em>{i}})| d_{i}\in\mathcal{D}}\rightarrow\mathcal{C}&#x3D;{\mathcal{C}<em>{d</em>{i}}|d_{i}\in\mathcal{D}},\mathcal{O}&#x3D;{o_{i}|o_{i}\in\mathcal{T}<em>{d</em>{i}},d_{i}\in\mathcal{D}},$$</p>
+<p>where $d_{i}$ represents the document $i$, $\mathcal{C}<em>{d</em>{i}}$ denotes the set of chunks extracted from $d_{i}$, $\mathcal{T}<em>{d</em>{i}}$ is the set of triples derived from $d_{i}$, $o_{i}$ refers to the subject or object within these triples $\mathcal{T}<em>{d</em>{i}}$.<br>其中 $d_{i}$ 代表文档 $i$，$\mathcal{C}<em>{d</em>{i}}$ 表示从 $d_{i}$ 中提取的块集合，$\mathcal{T}<em>{d</em>{i}}$ 是从 $d_{i}$ 导出的三元组集合，$o_{i}$ 指的是这些三元组 $\mathcal{T}<em>{d</em>{i}}$ 中的主语或宾语。</p>
+<hr>
+<p>Relation Construction.<br><strong>关系构建。</strong></p>
+<p>The entity-entity set $\mathcal{E}<em>{oo}$ is established based on all extracted triples ${\mathcal{T}</em>{d_{i}}|d_{i}\in\mathcal{D}}$, capturing fundamental semantic connections.<br>实体-实体边集 $\mathcal{E}<em>{oo}$ 基于所有提取的三元组 ${\mathcal{T}</em>{d_{i}}|d_{i}\in\mathcal{D}}$ 建立，捕捉基本的语义连接。</p>
+<p>The chunk-chunk set $\mathcal{E}<em>{cc}$ is constructed by linking adjacent chunks within a document, as their adjacency reflects a kind of logical coherent expression within a document.<br>块-块边集 $\mathcal{E}</em>{cc}$ 通过链接文档内相邻的块来构建，因为它们的相邻关系反映了文档内的一种逻辑连贯表达。</p>
+<p>The last three edge sets entity-chunk $\mathcal{E}<em>{oc}$, entity-document $\mathcal{E}</em>{od}$ and chunk-document $\mathcal{E}<em>{cd}$ are constructed based on containment relationships.<br>最后三个边集——实体-块 $\mathcal{E}</em>{oc}$、实体-文档 $\mathcal{E}<em>{od}$ 和块-文档 $\mathcal{E}</em>{cd}$——是基于包含关系构建的。</p>
+<hr>
+<p>We argue that Multi-L KG provides a comprehensive framework for modeling relationships from multiple perspectives.<br>我们认为 Multi-L KG 提供了一个从多视角建模关系的综合框架。</p>
+<p>First, it captures both basic semantic relationships($\mathcal{E}<em>{oo}$) and logical coherence($\mathcal{E}</em>{cc}$).<br>首先，它既捕捉了基本语义关系($\mathcal{E}<em>{oo}$)，也捕捉了逻辑连贯性($\mathcal{E}</em>{cc}$)。</p>
+<p>Second, $\mathcal{E}<em>{oc}$ and $\mathcal{E}</em>{od}$ represent local-to-global relationships, enabling precise understanding of entities in different contexts (e.g., “Apple” as a fruit or a company).<br>其次，$\mathcal{E}<em>{oc}$ 和 $\mathcal{E}</em>{od}$ 代表了从局部到全局的关系，使得能够精确理解实体在不同上下文中的含义（例如，”Apple”作为水果或公司）。</p>
+<p>Finally, $\mathcal{E}<em>{cd}$ serves as a high-level semantic bridge, connecting chunks to their corresponding documents for broader contextual understanding.<br>最后，$\mathcal{E}</em>{cd}$ 充当了一个高层级的语义桥梁，将块连接到其对应的文档，以实现更广泛的上下文理解。</p>
+<h4 id="Query-Specific-Graph-Neural-Network-查询特定图神经网络"><a href="#Query-Specific-Graph-Neural-Network-查询特定图神经网络" class="headerlink" title="Query-Specific Graph Neural Network 查询特定图神经网络"></a>Query-Specific Graph Neural Network 查询特定图神经网络</h4><p>QSGNN has two kinds of message passing process: intra-level message passing and inter-level message passing.<br>QSGNN 有两种消息传递过程：层内消息传递和层间消息传递。</p>
+<hr>
+<p>Intra-level Message Passing.<br><strong>层内消息传递。</strong></p>
+<p>Intra-level message passing aggregates information within the same level(i.e. $\mathcal{E}<em>{oo}$ and $\mathcal{E}</em>{cc}$).<br>层内消息传递聚合同一层级内的信息（即 $\mathcal{E}<em>{oo}$ 和 $\mathcal{E}</em>{cc}$）。</p>
+<p>For each information level, the process is defined as:<br>对于每个信息层级，该过程定义如下：</p>
+<p>$$\alpha_{i,j} &#x3D;Sim\left(\mathbf{h}<em>{i}^{l-1}W</em>{\alpha}^{q},\mathbf{h}<em>{j}^{l-1}W</em>{\alpha}^{k}\right),$$<br>$$\beta_{i,j} &#x3D;Sim\left(\mathbf{q}W_{\beta}^{q},(\mathbf{h}<em>{i}^{l-1}||\mathbf{h}</em>{j}^{l-1})W_{\beta}^{k}\right),$$<br>$$attn &#x3D;Softmax\left({\alpha_{i,j}+\beta_{i,j}|j\in\mathcal{N}(i)}\right),$$<br>$$msg_{i} &#x3D;\sum_{j\in\mathcal{N}(i)}attn_{i,j}\mathbf{h}<em>{j}^{l-1}W^{v},$$<br>$$\mathbf{h}</em>{i}^{l} &#x3D;P\left(Norm\left(\mathbf{h}<em>{i}^{l-1}+msg</em>{i}\right)\right),$$</p>
+<p>where $\mathbf{h}<em>{i&#x2F;j}^{l}\in R^{n}$ is the representation of node $i&#x2F;j$ in layer $l$, initialized with text embeddings from an embedding model.<br>其中 $\mathbf{h}</em>{i&#x2F;j}^{l}\in R^{n}$ 是节点 $i&#x2F;j$ 在第 $l$ 层的表示，使用来自嵌入模型的文本嵌入进行初始化。</p>
+<p>$Sim(\cdot)$ calculates the cosine similarity.<br>$Sim(\cdot)$ 计算余弦相似度。</p>
+<p>$\mathbf{q}\in R^{n}$ is the query embedding.<br>$\mathbf{q}\in R^{n}$ 是查询嵌入。</p>
+<p>$||$ represents the vector concatenation.<br>$||$ 表示向量拼接。</p>
+<p>$W_{\alpha&#x2F;\beta}^{q}\in R^{n\times n}$, $W_{\alpha}^{k}\in R^{n\times n}$, $W_{\beta}^{k}\in R^{2n\times n}$, $W^{v}\in R^{n\times n}$ are all learnable parameters.<br>$W_{\alpha&#x2F;\beta}^{q}\in R^{n\times n}$, $W_{\alpha}^{k}\in R^{n\times n}$, $W_{\beta}^{k}\in R^{2n\times n}$, $W^{v}\in R^{n\times n}$ 都是可学习参数。</p>
+<p>$Norm(\cdot)$ is the normalization function, $P(\cdot)$ is the 2-layers MLP with ReLU (Glorot et al., 2011).<br>$Norm(\cdot)$ 是归一化函数，$P(\cdot)$ 是带有 ReLU 激活函数的两层 MLP。</p>
+<hr>
+<p>Inter-level Message Passing.<br><strong>层间消息传递。</strong></p>
+<p>Inter-level message passing aggregates information across different levels of Multi-L KG (i.e., $\mathcal{E}<em>{oc}$, $\mathcal{E}</em>{od}$ and $\mathcal{E}<em>{cd}$).<br>层间消息传递聚合 Multi-L KG 中不同层级间的信息（即 $\mathcal{E}</em>{oc}$、$\mathcal{E}<em>{od}$ 和 $\mathcal{E}</em>{cd}$）。</p>
+<p>For each aggregation, the process is defined as:<br>对于每次聚合，该过程定义如下：</p>
+<p>$$\mathbf{p}<em>{i,j} &#x3D;\left((\mathbf{h}</em>{i}^{l-1})W^{t}||(\mathbf{h}<em>{j}^{l-1})W^{s}\right),$$<br>$$\gamma</em>{i,j} &#x3D;Sim\left(\mathbf{q}W_{\gamma}^{q},\mathbf{p}<em>{i,j}W</em>{\gamma}^{k}\right),$$<br>$$attn &#x3D;Softmax\left({\gamma_{i,j}|j\in\mathcal{N}(i)}\right),$$<br>$$\mathbf{msg}<em>{i} &#x3D;\sum</em>{j\in\mathcal{N}(i)}attn_{i,j}\mathbf{h}<em>{j}^{l-1}W^{v},$$<br>$$\mathbf{h}</em>{i}^{l} &#x3D;P\left(Norm\left(\mathbf{h}<em>{i}^{l-1}+\mathbf{msg}</em>{i}\right)\right),$$</p>
+<p>where $W^{t}$ and $W^{s}$ are used to project heterogeneous nodes into a shared representation space.<br>其中 $W^{t}$ 和 $W^{s}$ 用于将异构节点投影到一个共享的表示空间中。</p>
+<p>$W_{\gamma}^{q}\in R^{n\times n}$, $W_{\gamma}^{k}\in R^{n\times n}$ are learnable parameters.<br>$W_{\gamma}^{q}\in R^{n\times n}$, $W_{\gamma}^{k}\in R^{n\times n}$ 是可学习参数。</p>
+<p>The inter-level message passing fuses the local, global relationships from hierarchical levels into representations, which contains comprehensive understanding towards the query.<br>层间消息传递将来自分层层级的局部、全局关系融合到表示中，这使得表示包含了对查询的全面理解。</p>
+<hr>
+<p>Based on these two processes, QSGNN calculates the representations as follows:<br>基于这两个过程，QSGNN 按如下方式计算表示：</p>
+<p>$$\mathbf{H}<em>{intra}^{l} &#x3D;IntraMQ(\mathbf{q},O,\mathcal{C},\mathcal{E}</em>{oo},\mathcal{E}<em>{cc},\mathbf{H}^{l-1}),$$<br>$$\mathbf{H}^{l} &#x3D;InterMQ(\mathbf{q},O,\mathcal{C},\mathcal{C},\mathcal{E}</em>{oc},\mathcal{E}<em>{od},\mathcal{E}</em>{cd},\mathbf{H}_{intra}^{l}),$$</p>
+<p>where $IntraMQ(.)$ refers to the intra-level message passing defined in Equation 2 and $InterMQ(.)$ is the inter-level message passing defined in Equation 3.<br>其中 $IntraMQ(.)$ 指的是公式2中定义的层内消息传递，而 $InterMQ(.)$ 是公式3中定义的层间消息传递。</p>
+<h4 id="Training-Strategy-for-QSGNN-QSGNN的训练策略"><a href="#Training-Strategy-for-QSGNN-QSGNN的训练策略" class="headerlink" title="Training Strategy for QSGNN QSGNN的训练策略"></a>Training Strategy for QSGNN QSGNN的训练策略</h4><p>To enhance the representation learning ability of QSGNN, we first pre-train it on synthesized data and then we fine-tune it with human annotations.<br>为了增强QSGNN的表示学习能力，我们首先在合成数据上对其进行预训练，然后使用人工标注数据进行微调。</p>
+<p>The pre-training data are the synthesized (question, document) pairs extracted from the same corpora used to construct the Multi-L KG.<br>预训练数据是从用于构建Multi-L KG的同一语料库中提取的合成（问题，文档）对。</p>
+<p>These pairs contain one-hop questions and two-hop questions, which are all generated by OpenIE.<br>这些数据对包含单跳问题和双跳问题，均由OpenIE生成。</p>
+<hr>
+<p>One-hop Question.<br><strong>单跳问题。</strong></p>
+<p>We generate one-hop questions based on the triples extracted from documents.<br>我们基于从文档中提取的三元组生成单跳问题。</p>
+<p>For each triple-document pair ${(sbj,verb,obj),d}$, the question is generated in form of $(?,verb,obj)$ or $(sbj,verb,?)$ where the answer is $sbj$ or $obj$ and the support document is $d$.<br>对于每个三元组-文档对 ${(sbj,verb,obj),d}$，问题以 $(?,verb,obj)$ 或 $(sbj,verb,?)$ 的形式生成，其中答案是 $sbj$ 或 $obj$，支持文档是 $d$。</p>
+<hr>
+<p>Two-hop Question.<br><strong>双跳问题。</strong></p>
+<p>Two-hop questions are generated based on relation chains formed by shared entities across different documents.<br>双跳问题基于不同文档间通过共享实体形成的关系链生成。</p>
+<p>For instance, if document $d_{i}$ contains the triple $(sbj_{i},verb_{i},ent)$ and document $d_{j}$ contains the triple $(ent,verb_{j},obj_{j})$ where $ent$ is the common entity, we form the relation chain as $(sbj_{i},verb_{i},ent,verb_{j},obj_{j})$, the corresponding question is generated in the form $(?,verb_{i},ent,verb_{j},obj_{j})$ or $(sub_{i},verb_{i},ent,verb_{j},?)$ where the answer is $sub_{i}$ or $obj_{j}$ and the support documents are $d_{i}$ and $d_{j}$.<br>例如，如果文档 $d_{i}$ 包含三元组 $(sbj_{i},verb_{i},ent)$ 且文档 $d_{j}$ 包含三元组 $(ent,verb_{j},obj_{j})$，其中 $ent$ 是公共实体，我们形成关系链 $(sbj_{i},verb_{i},ent,verb_{j},obj_{j})$，对应的问题以 $(?,verb_{i},ent,verb_{j},obj_{j})$ 或 $(sub_{i},verb_{i},ent,verb_{j},?)$ 的形式生成，其中答案是 $sub_{i}$ 或 $obj_{j}$，支持文档是 $d_{i}$ 和 $d_{j}$。</p>
+<hr>
+<p>QSGNN使用NT-Xent损失在合成数据上进行预训练：<br>$$\mathcal{L}<em>{\text{NT-Xent}}&#x3D;-\frac{1}{M}\sum</em>{i&#x3D;1}^{M}\log\frac{\exp(\text{sim }(\mathbf{q}<em>{i},\mathbf{h}</em>{i})&#x2F;\tau)}{\sum_{j\in Neg(i)}\mathbf{1}<em>{[j\neq i]}\exp(\text{ sim}(\mathbf{q}</em>{i},\mathbf{h}_{j})&#x2F;\tau)},$$</p>
+<p>where $\mathbf{q}<em>{i}$ denotes the query embedding, $h</em>{i}$ is the representation of support document, $M$ is the batch size, $\tau$ is the temperature parameter and we set it as 1.0 in our implementation, $Neg(.)$ denotes the negative sampling and we employ a hard negative sampling strategy (Schroff et al. 2015; Xu et al. 2022) with sampling number set as 30.<br>其中 $\mathbf{q}<em>{i}$ 表示查询嵌入，$h</em>{i}$ 是支持文档的表示，$M$ 是批次大小，$\tau$ 是温度参数，我们在实现中将其设为1.0，$Neg(.)$ 表示负采样，我们采用了困难负采样策略，采样数量设为30。</p>
+<hr>
+<p>Given a query $\mathbf{q}$, the retrieval process of QSGNN is denoted as:<br>给定一个查询 $\mathbf{q}$，QSGNN的检索过程表示如下：</p>
+<p>$$score &#x3D;Sim(\mathbf{q},\mathbf{H}^{l}),$$<br>$$\mathcal{R} &#x3D;TopK(\mathcal{D},score),$$</p>
+<p>where $\mathbf{H}^{l}$ represents the representations calculated by Equation 4.<br>其中 $\mathbf{H}^{l}$ 代表由公式4计算得到的表示。</p>
+<p>The retrieval results are feed into LLM as context to generate response:<br>检索结果作为上下文输入到大语言模型（LLM）中以生成响应：</p>
+<p>$$response&#x3D;LLM(query,\mathcal{R}).$$</p>
+<h3 id="五-实验数据和结论"><a href="#五-实验数据和结论" class="headerlink" title="五.实验数据和结论"></a>五.实验数据和结论</h3><p>Recall@5结果对比：</p>
+<ul>
+<li>QSGNN: MuSiQue(75.23%), 2Wiki(89.47%), HotpotQA(93.67%), 平均(86.12%)</li>
+<li>最佳基线HippoRAG2: MuSiQue(72.29%), 2Wiki(88.91%), HotpotQA(92.56%), 平均(84.59%)</li>
+<li>QSGNN相比最佳基线平均提升1.53%</li>
+</ul>
+<p>关键发现：</p>
+<ul>
+<li>GNN方法优势：QSGNN和GFM-RAG相比传统方法有明显优势</li>
+<li>文本嵌入局限性：NV-Embed-v2和GTE-Qwen2虽然表现不错，但无法捕捉复杂关系</li>
+<li>图搜索方法稳定性：HippoRAG2在所有数据集上表现稳定</li>
+<li>朴素方法局限性：BM25和Contriever在多跳场景下效果有限</li>
+</ul>
+<hr>
+<p>EM得分对比：</p>
+<ul>
+<li>QSGNN: MuSiQue(36.65%), 2Wiki(57.02%), HotpotQA(60.23%), 平均(51.30%)</li>
+<li>最佳基线HippoRAG2: MuSiQue(35.16%), 2Wiki(56.60%), HotpotQA(60.92%), 平均(50.89%)</li>
+<li>QSGNN相比最佳基线平均提升0.41%</li>
+</ul>
+<p>F1得分对比：</p>
+<ul>
+<li>QSGNN: MuSiQue(44.93%), 2Wiki(66.83%), HotpotQA(74.44%), 平均(62.07%)</li>
+<li>最佳基线HippoRAG2: MuSiQue(42.44%), 2Wiki(66.18%), HotpotQA(74.06%), 平均(60.89%)</li>
+<li>QSGNN相比最佳基线平均提升1.18%</li>
+</ul>
+<p>重要观察：</p>
+<ul>
+<li>检索性能提升直接转化为QA性能提升</li>
+<li>无检索方法性能最差，证明外部知识的重要性</li>
+<li>LightRAG表现异常差，与多跳检索工作流不兼容</li>
+</ul>
+<hr>
+<p>多跳性能深度分析：</p>
+<ul>
+<li>跳数增加效应：所有方法性能随跳数增加而下降</li>
+<li>QSGNN高跳优势：在4跳问题上优势最为明显</li>
+<li>噪声累积问题：传统GNN方法在高跳时噪声累积严重</li>
+<li>查询对齐价值：QSGNN的查询引导机制有效过滤噪声</li>
+</ul>
+<hr>
+<p>检索时间对比（MuSiQue）：</p>
+<ul>
+<li>NV-Embed-v2: 0.036秒</li>
+<li>GFM-RAG: 0.086秒</li>
+<li>QSGNN: 0.118秒</li>
+<li>HippoRAG2: 0.317秒</li>
+<li>RAPTOR: 0.376秒</li>
+</ul>
+<p>效率-性能平衡：</p>
+<ul>
+<li>QSGNN在效率和性能间取得良好平衡</li>
+<li>图搜索方法（HippoRAG2、RAPTOR）时间成本最高</li>
+<li>纯嵌入方法最快但性能有限</li>
+</ul>
+<hr>
+<p>移除实体节点的影响：</p>
+<ul>
+<li>4跳Recall@5从64.65%降至25.02%（下降61.3%）</li>
+<li>证明实体构成Multi-L KG的语义基础</li>
+</ul>
+<p>移除层内消息传递的影响：</p>
+<ul>
+<li>4跳Recall@5从64.65%降至43.15%（下降33.2%）</li>
+<li>失去直接捕捉图谱结构的能力</li>
+</ul>
+<p>移除查询对齐的影响：</p>
+<ul>
+<li>4跳Recall@5从64.65%降至53.74%（下降16.9%）</li>
+<li>高跳问题时噪声影响显著放大</li>
+</ul>
+<p>移除块节点的影响：</p>
+<ul>
+<li>相对影响较小，文档节点可提供补偿信息</li>
+</ul>
+<hr>
+<p>核心优势：</p>
+<ol>
+<li>多粒度信息建模：实体、块、文档三级表示</li>
+<li>查询引导聚合：有效过滤噪声，关注相关信息</li>
+<li>综合训练策略：合成数据预训练+人工标注微调</li>
+<li>高跳问题处理：在复杂多跳场景下表现突出</li>
+</ol>
+<p>当前局限性：</p>
+<ol>
+<li>术语敏感性：对拼写错误和罕见术语处理不足</li>
+<li>序列依赖：存在强顺序依赖关系时表现受限</li>
+<li>计算复杂度：Multi-L KG构建和维护成本较高</li>
+</ol>
+<h2 id="本篇笔者工作"><a href="#本篇笔者工作" class="headerlink" title="本篇笔者工作"></a>本篇笔者工作</h2><ul>
+<li>整理原论文，保留核心内容，构建导读</li>
+<li>总结论文内容，辅以具体例子方便理解和后续查阅</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Ver0nical
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://ver0nical/2025/10/22/1/" title="《查询特定图神经网络：一种用于检索增强生成的全面图表表示学习方法》的导读及总结">http://ver0nical/2025/10/22/1/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/GNN/" rel="tag"># GNN</a>
+              <a href="/tags/RAG/" rel="tag"># RAG</a>
+              <a href="/tags/KGs/" rel="tag"># KGs</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2025/10/22/KG/" rel="prev" title="知识图谱（Knowledge Graphs）入门知识整理">
+      <i class="fa fa-chevron-left"></i> 知识图谱（Knowledge Graphs）入门知识整理
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%AA%E4%BA%BA%E5%88%86%E6%9E%90"><span class="nav-number">1.</span> <span class="nav-text">个人分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%AA%E4%BA%BA%E6%80%BB%E7%BB%93"><span class="nav-number">1.1.</span> <span class="nav-text">个人总结</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%96%87%E7%AB%A0%E6%9C%AC%E8%BA%AB"><span class="nav-number">1.1.1.</span> <span class="nav-text">文章本身</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AF%B9%E4%BA%8E%E7%AC%94%E8%80%85%E7%9A%84%E7%A0%94%E7%A9%B6%E6%96%B9%E5%90%91"><span class="nav-number">1.1.2.</span> <span class="nav-text">对于笔者的研究方向</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8E%9F%E6%96%87%E5%86%85%E5%AE%B9%E8%AF%A6%E8%A7%A3"><span class="nav-number">1.2.</span> <span class="nav-text">原文内容详解</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E8%A7%A3%E5%86%B3%E5%A4%9A%E8%B7%B3%E9%97%AE%E9%A2%98%EF%BC%9F"><span class="nav-number">1.2.1.</span> <span class="nav-text">1. 为什么要解决多跳问题？</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-1-%E4%BB%80%E4%B9%88%E6%98%AF%E5%A4%9A%E8%B7%B3%E9%97%AE%E9%A2%98%EF%BC%9F"><span class="nav-number">1.2.1.1.</span> <span class="nav-text">1.1 什么是多跳问题？</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#1-2-%E4%BC%A0%E7%BB%9F%E6%96%B9%E6%B3%95%E7%9A%84%E5%B1%80%E9%99%90%E6%80%A7"><span class="nav-number">1.2.1.2.</span> <span class="nav-text">1.2 传统方法的局限性</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-Multi-L-KG%EF%BC%9A%E6%9E%84%E5%BB%BA%E7%9F%A5%E8%AF%86%E2%80%9D%E5%9C%B0%E5%9B%BE%E2%80%9D"><span class="nav-number">1.2.2.</span> <span class="nav-text">2. Multi-L KG：构建知识”地图”</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#2-1-%E5%85%B7%E4%BD%93%E6%9E%84%E5%BB%BA%E8%BF%87%E7%A8%8B"><span class="nav-number">1.2.2.1.</span> <span class="nav-text">2.1 具体构建过程</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-2-%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E8%BF%99%E6%A0%B7%E8%AE%BE%E8%AE%A1%EF%BC%9F"><span class="nav-number">1.2.2.2.</span> <span class="nav-text">2.2 为什么要这样设计？</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-QSGNN%EF%BC%9A%E6%99%BA%E8%83%BD%E7%9A%84%E2%80%9D%E4%BF%A1%E6%81%AF%E5%AF%BC%E8%88%AA%E5%91%98%E2%80%9D"><span class="nav-number">1.2.3.</span> <span class="nav-text">3. QSGNN：智能的”信息导航员”</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#3-1-%E4%BC%A0%E7%BB%9F%E5%9B%BE%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E7%9A%84%E5%B1%80%E9%99%90%E6%80%A7"><span class="nav-number">1.2.3.1.</span> <span class="nav-text">3.1 传统图神经网络的局限性</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-2-QSGNN%E7%9A%84%E5%88%9B%E6%96%B0%EF%BC%9A%E6%9F%A5%E8%AF%A2%E5%BC%95%E5%AF%BC"><span class="nav-number">1.2.3.2.</span> <span class="nav-text">3.2 QSGNN的创新：查询引导</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#%E5%B1%82%E5%86%85%E6%B6%88%E6%81%AF%E4%BC%A0%E9%80%92%EF%BC%88%E5%90%8C%E5%B1%82%E7%BA%A7%E4%BF%A1%E6%81%AF%E6%95%B4%E5%90%88%EF%BC%89"><span class="nav-number">1.2.3.2.1.</span> <span class="nav-text">层内消息传递（同层级信息整合）</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#%E5%B1%82%E9%97%B4%E6%B6%88%E6%81%AF%E4%BC%A0%E9%80%92%EF%BC%88%E8%B7%A8%E5%B1%82%E7%BA%A7%E4%BF%A1%E6%81%AF%E6%95%B4%E5%90%88%EF%BC%89"><span class="nav-number">1.2.3.2.2.</span> <span class="nav-text">层间消息传递（跨层级信息整合）</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-3-%E4%B8%BA%E4%BB%80%E4%B9%88%E6%9F%A5%E8%AF%A2%E5%BC%95%E5%AF%BC%E5%BE%88%E9%87%8D%E8%A6%81%EF%BC%9F"><span class="nav-number">1.2.3.3.</span> <span class="nav-text">3.3 为什么查询引导很重要？</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-%E8%AE%AD%E7%BB%83%E7%AD%96%E7%95%A5%EF%BC%9A%E5%85%88%E2%80%9D%E6%A8%A1%E6%8B%9F%E8%80%83%E8%AF%95%E2%80%9D%E5%86%8D%E2%80%9D%E7%9C%9F%E5%AE%9E%E8%80%83%E8%AF%95%E2%80%9D"><span class="nav-number">1.2.4.</span> <span class="nav-text">4. 训练策略：先”模拟考试”再”真实考试”</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#4-1-%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E9%A2%84%E8%AE%AD%E7%BB%83%EF%BC%9F"><span class="nav-number">1.2.4.1.</span> <span class="nav-text">4.1 为什么需要预训练？</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#4-2-%E5%90%88%E6%88%90%E6%95%B0%E6%8D%AE%E7%94%9F%E6%88%90%EF%BC%9A%E8%87%AA%E5%8A%A8%E5%87%BA%E9%A2%98"><span class="nav-number">1.2.4.2.</span> <span class="nav-text">4.2 合成数据生成：自动出题</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#%E5%8D%95%E8%B7%B3%E9%97%AE%E9%A2%98%E7%94%9F%E6%88%90"><span class="nav-number">1.2.4.2.1.</span> <span class="nav-text">单跳问题生成</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#%E5%8F%8C%E8%B7%B3%E9%97%AE%E9%A2%98%E7%94%9F%E6%88%90"><span class="nav-number">1.2.4.2.2.</span> <span class="nav-text">双跳问题生成</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#4-3-%E8%AE%AD%E7%BB%83%E7%9B%AE%E6%A0%87%EF%BC%9A%E5%AD%A6%E4%BC%9A%E2%80%9D%E6%89%BE%E5%AF%B9%E6%96%87%E6%A1%A3%E2%80%9D"><span class="nav-number">1.2.4.3.</span> <span class="nav-text">4.3 训练目标：学会”找对文档”</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#4-4-%E4%B8%A4%E9%98%B6%E6%AE%B5%E8%AE%AD%E7%BB%83%E7%9A%84%E5%A5%BD%E5%A4%84"><span class="nav-number">1.2.4.4.</span> <span class="nav-text">4.4 两阶段训练的好处</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-%E6%A3%80%E7%B4%A2%E4%B8%8E%E7%94%9F%E6%88%90%EF%BC%9A%E6%9C%80%E7%BB%88%E7%AD%94%E6%A1%88%E7%9A%84%E4%BA%A7%E7%94%9F"><span class="nav-number">1.2.5.</span> <span class="nav-text">5. 检索与生成：最终答案的产生</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#5-1-%E6%A3%80%E7%B4%A2%E8%BF%87%E7%A8%8B"><span class="nav-number">1.2.5.1.</span> <span class="nav-text">5.1 检索过程</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#5-2-%E7%94%9F%E6%88%90%E8%BF%87%E7%A8%8B"><span class="nav-number">1.2.5.2.</span> <span class="nav-text">5.2 生成过程</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8E%9F%E6%96%87%E5%88%9B%E6%96%B0%E5%88%86%E6%9E%90"><span class="nav-number">1.3.</span> <span class="nav-text">原文创新分析</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8A%80%E6%9C%AF%E9%9A%BE%E7%82%B9%E4%B8%8E%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88%E6%80%BB%E7%BB%93"><span class="nav-number">1.3.1.</span> <span class="nav-text">技术难点与解决方案总结</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E9%9A%BE%E7%82%B91%EF%BC%9A%E4%BF%A1%E6%81%AF%E8%BF%87%E8%BD%BD"><span class="nav-number">1.3.1.1.</span> <span class="nav-text">难点1：信息过载</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E9%9A%BE%E7%82%B92%EF%BC%9A%E8%AF%AD%E4%B9%89%E6%AD%A7%E4%B9%89"><span class="nav-number">1.3.1.2.</span> <span class="nav-text">难点2：语义歧义</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E9%9A%BE%E7%82%B93%EF%BC%9A%E8%AE%AD%E7%BB%83%E6%95%B0%E6%8D%AE%E7%A8%80%E7%BC%BA"><span class="nav-number">1.3.1.3.</span> <span class="nav-text">难点3：训练数据稀缺</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E9%9A%BE%E7%82%B94%EF%BC%9A%E9%94%99%E8%AF%AF%E7%B4%AF%E7%A7%AF"><span class="nav-number">1.3.1.4.</span> <span class="nav-text">难点4：错误累积</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%80%9A%E4%BF%97%E7%B1%BB%E6%AF%94%EF%BC%9A%E4%BE%A6%E6%8E%A2%E7%A0%B4%E6%A1%88%E8%BF%87%E7%A8%8B"><span class="nav-number">1.3.2.</span> <span class="nav-text">通俗类比：侦探破案过程</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8E%9F%E6%96%87%E5%AF%BC%E8%AF%BB"><span class="nav-number">2.</span> <span class="nav-text">原文导读</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80-%E8%83%8C%E6%99%AF"><span class="nav-number">2.1.</span> <span class="nav-text">一.背景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%8C-%E6%8C%91%E6%88%98"><span class="nav-number">2.2.</span> <span class="nav-text">二.挑战</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%89-%E5%88%9B%E6%96%B0"><span class="nav-number">2.3.</span> <span class="nav-text">三.创新</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%9B-%E6%96%B9%E6%B3%95"><span class="nav-number">2.4.</span> <span class="nav-text">四.方法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Multi-information-level-KG-Construction-%E5%A4%9A%E4%BF%A1%E6%81%AF%E5%B1%82%E7%BA%A7%E7%9F%A5%E8%AF%86%E5%9B%BE%E8%B0%B1%E6%9E%84%E5%BB%BA"><span class="nav-number">2.4.1.</span> <span class="nav-text">Multi-information level KG Construction 多信息层级知识图谱构建</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Query-Specific-Graph-Neural-Network-%E6%9F%A5%E8%AF%A2%E7%89%B9%E5%AE%9A%E5%9B%BE%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C"><span class="nav-number">2.4.2.</span> <span class="nav-text">Query-Specific Graph Neural Network 查询特定图神经网络</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Training-Strategy-for-QSGNN-QSGNN%E7%9A%84%E8%AE%AD%E7%BB%83%E7%AD%96%E7%95%A5"><span class="nav-number">2.4.3.</span> <span class="nav-text">Training Strategy for QSGNN QSGNN的训练策略</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%94-%E5%AE%9E%E9%AA%8C%E6%95%B0%E6%8D%AE%E5%92%8C%E7%BB%93%E8%AE%BA"><span class="nav-number">2.5.</span> <span class="nav-text">五.实验数据和结论</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%AC%E7%AF%87%E7%AC%94%E8%80%85%E5%B7%A5%E4%BD%9C"><span class="nav-number">3.</span> <span class="nav-text">本篇笔者工作</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Ver0nical"
+      src="/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">Ver0nical</p>
+  <div class="site-description" itemprop="description">自此之后，有公义的冠冕为他留存</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">4</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Ver0nical</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">36k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">33 分钟</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+  <script defer src="/lib/three/three.min.js"></script>
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
