@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 8.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"ver0nical","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="内容来源：arxiv整理翻译：Ver0nical 知识图谱补全（KGC）旨在通过利用知识图谱（KG）中已有的三元组和文本信息来预测缺失的三元组。 然而，当前的方法通常以文本形式编码图上下文，这未能充分利用LLM在感知和推理图结构方面的潜力。 为了解决这个问题，DrKGC 提出了一个动态子图检索增强大语言模型的框架，旨在通过检索与查询相关的子图来增强 KGC 任务的性能。 本文有助于笔者理解有关LL">
+<meta property="og:type" content="article">
+<meta property="og:title" content="《DrKGC：用于通用和生物医学领域知识图谱补全的动态子图检索增强大语言模型》的导读及总结">
+<meta property="og:url" content="http://ver0nical/2025/10/27/DrKGC/index.html">
+<meta property="og:site_name" content="维罗妮卡小屋">
+<meta property="og:description" content="内容来源：arxiv整理翻译：Ver0nical 知识图谱补全（KGC）旨在通过利用知识图谱（KG）中已有的三元组和文本信息来预测缺失的三元组。 然而，当前的方法通常以文本形式编码图上下文，这未能充分利用LLM在感知和推理图结构方面的潜力。 为了解决这个问题，DrKGC 提出了一个动态子图检索增强大语言模型的框架，旨在通过检索与查询相关的子图来增强 KGC 任务的性能。 本文有助于笔者理解有关LL">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-10-27T11:43:57.398Z">
+<meta property="article:modified_time" content="2025-10-27T11:43:57.398Z">
+<meta property="article:author" content="Ver0nical">
+<meta property="article:tag" content="KGC">
+<meta property="article:tag" content="KGs">
+<meta property="article:tag" content="LLMs">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://ver0nical/2025/10/27/DrKGC/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>《DrKGC：用于通用和生物医学领域知识图谱补全的动态子图检索增强大语言模型》的导读及总结 | 维罗妮卡小屋</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">维罗妮卡小屋</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-schedule">
+
+    <a href="/schedule/" rel="section"><i class="fa fa-calendar fa-fw"></i>日程表</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://ver0nical/2025/10/27/DrKGC/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Ver0nical">
+      <meta itemprop="description" content="自此之后，有公义的冠冕为他留存">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="维罗妮卡小屋">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          《DrKGC：用于通用和生物医学领域知识图谱补全的动态子图检索增强大语言模型》的导读及总结
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2025-10-27 19:43:57" itemprop="dateCreated datePublished" datetime="2025-10-27T19:43:57+08:00">2025-10-27</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>4.6k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>4 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>内容来源：<a target="_blank" rel="noopener" href="https://arxiv.org/abs/2506.00708">arxiv</a><br>整理翻译：<a target="_blank" rel="noopener" href="https://github.com/Ver0nical">Ver0nical</a></p>
+<p>知识图谱补全（KGC）旨在通过利用知识图谱（KG）中已有的三元组和文本信息来预测缺失的三元组。</p>
+<p>然而，当前的方法通常以文本形式编码图上下文，这未能充分利用LLM在感知和推理图结构方面的潜力。</p>
+<p>为了解决这个问题，DrKGC 提出了一个动态子图检索增强大语言模型的框架，旨在通过检索与查询相关的子图来增强 KGC 任务的性能。</p>
+<p>本文有助于笔者理解有关LLMs增强KGC任务的最新进展，同时也为笔者提供了一些启发，帮助笔者在未来的研究中探索类似的方法。</p>
+<span id="more"></span>
+<h2 id="1-个人分析"><a href="#1-个人分析" class="headerlink" title="1. 个人分析"></a>1. 个人分析</h2><h2 id="2-原文导读"><a href="#2-原文导读" class="headerlink" title="2. 原文导读"></a>2. 原文导读</h2><h3 id="2-1-背景"><a href="#2-1-背景" class="headerlink" title="2.1. 背景"></a>2.1. 背景</h3><p>BKGs, like other KGs, often suffer from incompleteness, typically manifested as missing edges between nodes （Chen et al. 2020） .<br>与其他KG一样，BKG通常存在不完整的问题，通常表现为节点之间缺失边。</p>
+<p>This incompleteness may arise because (1) the facts are absent from the data source, or (2) they remain undiscovered by humans.<br>这种不完整性可能源于（1）数据源中缺少这些事实，或（2）它们尚未被人类发现。</p>
+<p>Such issues are particularly prevalent in BKGs, as their data primarily originates from experimental results, clinical trials, and scientific literature.<br>此类问题在BKG中尤为普遍，因为其数据主要来源于实验结果、临床试验和科学文献。</p>
+<p>Recently, the advent of generative large language models (LLMs) has given rise to a new class of generation-based KGC approaches.<br>最近，生成式大语言模型（LLM）的出现催生了一类新的基于生成的KGC方法。</p>
+<h3 id="2-2-挑战"><a href="#2-2-挑战" class="headerlink" title="2.2. 挑战"></a>2.2. 挑战</h3><p>Structural Information Loss: These methods often fail to preserve the rich structural information inherent in knowledge graphs.<br><strong>结构信息丢失</strong>：这些方法通常无法保留知识图谱中固有的丰富结构信息。</p>
+<p>While graph paths or subgraphs can be encoded as text prompts, overly long inputs introduce noise and increase computational costs.<br>虽然图路径或子图可以被编码为文本提示，但过长的输入会引入噪声并增加计算成本。</p>
+<p>Static Embedding Limitations: Incorporating structural embeddings into LLMs offers a partial solution but remains limited, as such embeddings are static and do not adapt to the query-specific context or dynamic subgraph structure.<br><strong>静态嵌入局限性</strong>：将结构嵌入整合到LLM中提供了一种部分解决方案，但仍然有限，因为这些嵌入是静态的，无法适应特定查询的上下文或动态子图结构。</p>
+<p>Generic Responses from LLMs: In the absence of additional constraints, LLMs tend to generate generic predictions influenced by pretraining data.<br><strong>LLM的通用响应</strong>：在没有额外约束的情况下，LLM倾向于生成受预训练数据影响的通用预测。</p>
+<h2 id="2-3-解决-方法论"><a href="#2-3-解决-方法论" class="headerlink" title="2.3. 解决/方法论"></a>2.3. 解决/方法论</h2><h3 id="2-3-1-问题生成器"><a href="#2-3-1-问题生成器" class="headerlink" title="2.3.1. 问题生成器"></a>2.3.1. 问题生成器</h3><h4 id="模板生成"><a href="#模板生成" class="headerlink" title="模板生成"></a>模板生成</h4><p>对于每个知识图谱(KG)，我们GPT的少量样本上下文学习进行一次性模板生成过程。</p>
+<p><strong>具体流程：</strong></p>
+<ul>
+<li>向GPT提供以下信息：<ul>
+<li>关系名称</li>
+<li>关系文本描述</li>
+<li>一小组样本三元组</li>
+</ul>
+</li>
+<li>GPT通过模式归纳生成对应的问题模板</li>
+<li>模板中包含查询实体的占位符</li>
+</ul>
+<p><strong>输出结果：</strong><br>在处理完每个关系后，编译一个问题模板词典 $L$，该词典：</p>
+<ul>
+<li>区分头实体预测和尾实体预测</li>
+<li>覆盖整个关系集</li>
+</ul>
+<h4 id="问题生成"><a href="#问题生成" class="headerlink" title="问题生成"></a>问题生成</h4><p>在获得词典 $L$ 后，问题生成过程如下：</p>
+<p><strong>步骤：</strong></p>
+<ol>
+<li>将查询关系 $r_q$ 映射到其对应的问题模板</li>
+<li>将查询实体 $t_q$ 放入模板的占位符位置</li>
+<li>生成完整的问题 $Q$</li>
+</ol>
+<p><strong>数学表达：</strong></p>
+<script type="math/tex; mode=display">Q = P(L(r_q), t_q)</script><p>其中：</p>
+<ul>
+<li>$L(r_q)$: 从词典 $L$ 中获取关系 $r_q$ 对应的问题模板</li>
+<li>$t_q$: 查询实体</li>
+<li>$P$: 模板填充函数</li>
+<li>$Q$: 生成的完整问题</li>
+</ul>
+<h3 id="2-3-2-候选检索器"><a href="#2-3-2-候选检索器" class="headerlink" title="2.3.2. 候选检索器"></a>2.3.2. 候选检索器</h3><h4 id="候选检索机制"><a href="#候选检索机制" class="headerlink" title="候选检索机制"></a>候选检索机制</h4><h5 id="问题背景与解决方案"><a href="#问题背景与解决方案" class="headerlink" title="问题背景与解决方案"></a>问题背景与解决方案</h5><p><strong>面临的挑战：</strong></p>
+<ul>
+<li>搜索空间过大</li>
+<li>LLM输入能力有限  </li>
+<li>LLM倾向于产生通用响应</li>
+</ul>
+<h5 id="轻量级模型训练"><a href="#轻量级模型训练" class="headerlink" title="轻量级模型训练"></a>轻量级模型训练</h5><h6 id="训练目标"><a href="#训练目标" class="headerlink" title="训练目标"></a>训练目标</h6><p>与先前工作不同，我们不仅需要实体排名，还需要：</p>
+<ul>
+<li>获取实体的结构嵌入</li>
+<li>学习KG中关系的逻辑规则</li>
+<li>为后续子图检索提供指导</li>
+</ul>
+<h6 id="模型特性"><a href="#模型特性" class="headerlink" title="模型特性"></a>模型特性</h6><p><strong>“轻量级”定义：</strong></p>
+<ul>
+<li>更简单、资源效率更高</li>
+<li>不依赖大规模预训练</li>
+<li>过程灵活，可替换为任何能生成结构化嵌入和执行规则挖掘的先进方法</li>
+</ul>
+<h6 id="模型实现"><a href="#模型实现" class="headerlink" title="模型实现"></a>模型实现</h6><p><strong>使用的模型类型：</strong></p>
+<ul>
+<li><strong>结构模型</strong> ($M_S$): 生成全局嵌入 $\mathbf{E}_{global} = \{\mathbf{e}_{global} \mid e \in \mathcal{E}\}$</li>
+<li><strong>规则模型</strong> ($M_R$): 为每个关系 $r \in \mathcal{R}$ 提取逻辑规则集合 $\mathcal{L}_r$</li>
+</ul>
+<p><strong>实现策略：</strong><br>专注于利用在KGC任务上表现优异的开源方法</p>
+<h5 id="候选收集"><a href="#候选收集" class="headerlink" title="候选收集"></a>候选收集</h5><h6 id="排序机制"><a href="#排序机制" class="headerlink" title="排序机制"></a>排序机制</h6><p>使用性能最好的轻量级模型对候选实体进行粗粒度排序</p>
+<h6 id="具体流程"><a href="#具体流程" class="headerlink" title="具体流程"></a>具体流程</h6><p>对于头实体预测 $(?, r_q, t_q)$：</p>
+<ol>
+<li><p><strong>实体替换：</strong></p>
+<ul>
+<li>用每个实体 $\{e \in \mathcal{E} \mid (e, r_q, t_q) \notin \mathcal{T}\}$ 替换头实体</li>
+</ul>
+</li>
+<li><p><strong>评分计算：</strong></p>
+<ul>
+<li>计算每个生成三元组的似然分数</li>
+<li>分数反映三元组的合理性</li>
+</ul>
+</li>
+<li><p><strong>候选选择：</strong></p>
+<ul>
+<li>选择排名前 $k$ 的三元组中被替换的实体</li>
+<li>形成候选集 $C = [e_1, e_2, e_3, \ldots, e_k]$</li>
+</ul>
+</li>
+</ol>
+<p>对于尾实体预测 $(h_q, r_q, ?)$，过程类似，只是替换尾实体。</p>
+<h3 id="2-4-动态子图RAG策略"><a href="#2-4-动态子图RAG策略" class="headerlink" title="2.4. 动态子图RAG策略"></a>2.4. 动态子图RAG策略</h3><h4 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h4><p>检索增强生成（RAG）将基于检索的方法与生成模型相结合，以提高生成文本的质量和准确性 (Lewis et al., 2020)。受此启发，提出了一种专为KGC任务定制的动态子图RAG策略，包含两个关键组件：</p>
+<ol>
+<li><strong>动态子图检索</strong></li>
+<li><strong>结构感知嵌入增强</strong></li>
+</ol>
+<h4 id="动态子图检索"><a href="#动态子图检索" class="headerlink" title="动态子图检索"></a>动态子图检索</h4><h5 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h5><p>使LLM能够基于查询实体 $t_q$ 和查询关系 $r_q$ 从候选集 $C$ 中选择正确答案，通过检索信息丰富的子图来增强图谱上下文。</p>
+<h5 id="自底向上动态检索方案"><a href="#自底向上动态检索方案" class="headerlink" title="自底向上动态检索方案"></a>自底向上动态检索方案</h5><p><strong>动态性体现：</strong> 并非机械地仅基于 $t_q$ 和 $r_q$ 检索子图，而是能够适应变化的候选集。</p>
+<h5 id="检索流程"><a href="#检索流程" class="headerlink" title="检索流程"></a>检索流程</h5><p>步骤1：<strong>基础连通性保证</strong></p>
+<ul>
+<li>检索连接每个候选实体 $e \in C$ 到查询实体 $t_q$ 的最短路径</li>
+<li>确保 $t_q$ 和所有候选实体 $e \in C$ 都包含在子图 $G$ 中</li>
+<li>保证图结构的连通性</li>
+</ul>
+<p>步骤2：<strong>基于规则的路径丰富</strong></p>
+<ul>
+<li>将逻辑规则集 $\mathcal{L}_{r_q}$ 中的规则按置信度得分排序</li>
+<li>依次使用这些规则搜索从候选实体 $e \in C$ 到 $t_q$ 的路径</li>
+<li>持续丰富子图内容</li>
+</ul>
+<p>步骤3：<strong>大小约束控制</strong></p>
+<ul>
+<li>过程持续进行，直到子图中的三元组数量达到预设阈值 $\tau$</li>
+<li>$\tau$ 用于约束子图的大小</li>
+</ul>
+<p>步骤4：<strong>补充扩展</strong></p>
+<ul>
+<li>如果三元组数量仍低于 $\tau$</li>
+<li>通过关系 $r_q$ 及其逻辑规则，将与 $e \in C$ 和 $t_q$ 中其他实体相连的额外三元组添加到子图中</li>
+</ul>
+<h4 id="结构感知嵌入增强"><a href="#结构感知嵌入增强" class="headerlink" title="结构感知嵌入增强"></a>结构感知嵌入增强</h4><h5 id="传统RAG的局限性"><a href="#传统RAG的局限性" class="headerlink" title="传统RAG的局限性"></a>传统RAG的局限性</h5><ul>
+<li>将结构化子图直接整合到提示中具有挑战性</li>
+<li>文本描述会导致结构信息丢失</li>
+<li>子图内容丰富会导致文本过长</li>
+</ul>
+<h5 id="解决方案：图上下文向量化"><a href="#解决方案：图上下文向量化" class="headerlink" title="解决方案：图上下文向量化"></a>解决方案：图上下文向量化</h5><p>利用子图的结构信息将图上下文向量化，得到<strong>局部嵌入</strong>：</p>
+<script type="math/tex; mode=display">\mathbf{E}_{local} = \{\mathbf{e}_{local} \mid e \in \mathcal{E}\}</script><h5 id="GCN适配器设计"><a href="#GCN适配器设计" class="headerlink" title="GCN适配器设计"></a>GCN适配器设计</h5><p><strong>架构组成：</strong></p>
+<ul>
+<li>低维关系GCN</li>
+<li>后续适配器（将向量投影到LLM输入层维度）</li>
+</ul>
+<p><strong>工作流程：</strong></p>
+<ol>
+<li><p><strong>初始化：</strong></p>
+<ul>
+<li>对于每个查询子图，GCN使用所有实体的全局嵌入进行初始化</li>
+</ul>
+</li>
+<li><p><strong>表示更新：</strong></p>
+<ul>
+<li>通过邻域聚合机制更新这些表示</li>
+<li>产生局部嵌入 $\mathbf{e}_{local}$</li>
+</ul>
+</li>
+<li><p><strong>嵌入融合：</strong></p>
+<ul>
+<li>拼接全局和局部嵌入形成最终增强结构嵌入：<script type="math/tex; mode=display">\mathbf{e}_{enhance} = [\mathbf{e}_{global}; \mathbf{e}_{local}]</script></li>
+</ul>
+</li>
+<li><p><strong>维度适配：</strong></p>
+<ul>
+<li>为减少计算开销，GCN计算在低维空间进行</li>
+<li>使用适配器将结构化嵌入映射到LLM输入维度</li>
+<li>实现无缝集成</li>
+</ul>
+</li>
+</ol>
+<p><strong>训练特性：</strong><br>在LoRA微调期间，允许梯度流过整个模型，包括GCN适配器。</p>
+<h3 id="2-5-提示模板设计"><a href="#2-5-提示模板设计" class="headerlink" title="2.5. 提示模板设计"></a>2.5. 提示模板设计</h3><h4 id="模板结构概述"><a href="#模板结构概述" class="headerlink" title="模板结构概述"></a>模板结构概述</h4><p>对于每个被查询的不完整三元组，提示模板包含以下核心组件：</p>
+<h5 id="任务指令-Instruction"><a href="#任务指令-Instruction" class="headerlink" title="任务指令 (Instruction)"></a>任务指令 (Instruction)</h5><p>你是一个知识图谱补全专家。请根据提供的结构化信息和候选实体，选择最合适的答案。</p>
+<h5 id="候选实体集-Candidates-Set"><a href="#候选实体集-Candidates-Set" class="headerlink" title="候选实体集 (Candidates Set)"></a>候选实体集 (Candidates Set)</h5><p>候选实体列表：{entity_1}, {entity_2}, {entity_3}, …, {entity_k}</p>
+<h5 id="结构化嵌入占位符-Structured-Embeddings-Placeholder"><a href="#结构化嵌入占位符-Structured-Embeddings-Placeholder" class="headerlink" title="结构化嵌入占位符 (Structured Embeddings Placeholder)"></a>结构化嵌入占位符 (Structured Embeddings Placeholder)</h5><p>结构化上下文嵌入：</p>
+<p>查询实体嵌入：[PLACEHOLDER_QUERY_ENTITY]</p>
+<p>候选实体嵌入：<br>[PLACEHOLDER_CANDIDATE_1]<br>[PLACEHOLDER_CANDIDATE_2]<br>…<br>[PLACEHOLDER_CANDIDATE_k]</p>
+<h5 id="生成的问题-Generated-Question"><a href="#生成的问题-Generated-Question" class="headerlink" title="生成的问题 (Generated Question)"></a>生成的问题 (Generated Question)</h5><p>问题：{生成的特定问题}</p>
+<h4 id="完整模板示例"><a href="#完整模板示例" class="headerlink" title="完整模板示例"></a>完整模板示例</h4><p>指令：你是一个知识图谱补全专家。请根据提供的结构化信息和候选实体，选择最合适的答案。</p>
+<p>候选实体：阿斯匹林, 布洛芬, 青霉素, 维生素C, 胰岛素</p>
+<p>结构化嵌入：</p>
+<p>查询实体（糖尿病）嵌入：[PLACEHOLDER_DIABETES]</p>
+<p>候选实体嵌入：<br>[PLACEHOLDER_ASPIRIN]<br>[PLACEHOLDER_IBUPROFEN]<br>[PLACEHOLDER_PENICILLIN]<br>[PLACEHOLDER_VITAMIN_C]<br>[PLACEHOLDER_INSULIN]</p>
+<p>问题：什么药物可以用于治疗糖尿病？</p>
+<h4 id="技术实现细节"><a href="#技术实现细节" class="headerlink" title="技术实现细节"></a>技术实现细节</h4><h5 id="占位符替换机制"><a href="#占位符替换机制" class="headerlink" title="占位符替换机制"></a>占位符替换机制</h5><ul>
+<li><code>[PLACEHOLDER_*]</code> 标记在令牌向量化阶段被替换</li>
+<li>替换为实际的增强结构嵌入向量：<ul>
+<li>查询实体 $t_q$ 的嵌入 $\mathbf{e}_{enhance}^{t_q}$</li>
+<li>每个候选实体 $e \in C$ 的嵌入 $\mathbf{e}_{enhance}^{e}$</li>
+</ul>
+</li>
+</ul>
+<h5 id="嵌入表示"><a href="#嵌入表示" class="headerlink" title="嵌入表示"></a>嵌入表示</h5><p>最终的增强结构嵌入由全局和局部嵌入拼接而成：</p>
+<script type="math/tex; mode=display">\mathbf{e}_{enhance} = [\mathbf{e}_{global}; \mathbf{e}_{local}]</script><h5 id="处理流程"><a href="#处理流程" class="headerlink" title="处理流程"></a>处理流程</h5><ol>
+<li><strong>模板初始化</strong>：使用固定的指令和结构</li>
+<li><strong>动态填充</strong>：<ul>
+<li>插入候选实体列表</li>
+<li>插入由Question Generator生成的具体问题</li>
+</ul>
+</li>
+<li><strong>向量替换</strong>：在模型处理时将占位符替换为实际的嵌入向量</li>
+<li><strong>LLM推理</strong>：模型基于综合信息进行预测</li>
+</ol>
+<h4 id="设计优势"><a href="#设计优势" class="headerlink" title="设计优势"></a>设计优势</h4><ol>
+<li><strong>结构化信息保留</strong>：通过嵌入向量保留图结构信息</li>
+<li><strong>候选约束</strong>：限制输出空间，提高准确性</li>
+<li><strong>自然语言接口</strong>：使用问题形式，符合LLM的推理模式</li>
+<li><strong>灵活扩展</strong>：模板可适应不同的关系和实体类型</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Ver0nical
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://ver0nical/2025/10/27/DrKGC/" title="《DrKGC：用于通用和生物医学领域知识图谱补全的动态子图检索增强大语言模型》的导读及总结">http://ver0nical/2025/10/27/DrKGC/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/KGs/" rel="tag"># KGs</a>
+              <a href="/tags/LLMs/" rel="tag"># LLMs</a>
+              <a href="/tags/KGC/" rel="tag"># KGC</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2025/10/23/1/" rel="prev" title="《查询特定图神经网络：一种用于检索增强生成的全面图表表示学习方法》的导读及总结">
+      <i class="fa fa-chevron-left"></i> 《查询特定图神经网络：一种用于检索增强生成的全面图表表示学习方法》的导读及总结
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E4%B8%AA%E4%BA%BA%E5%88%86%E6%9E%90"><span class="nav-number">1.</span> <span class="nav-text">1. 个人分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%8E%9F%E6%96%87%E5%AF%BC%E8%AF%BB"><span class="nav-number">2.</span> <span class="nav-text">2. 原文导读</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E8%83%8C%E6%99%AF"><span class="nav-number">2.1.</span> <span class="nav-text">2.1. 背景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-%E6%8C%91%E6%88%98"><span class="nav-number">2.2.</span> <span class="nav-text">2.2. 挑战</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3-%E8%A7%A3%E5%86%B3-%E6%96%B9%E6%B3%95%E8%AE%BA"><span class="nav-number">3.</span> <span class="nav-text">2.3. 解决&#x2F;方法论</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-1-%E9%97%AE%E9%A2%98%E7%94%9F%E6%88%90%E5%99%A8"><span class="nav-number">3.1.</span> <span class="nav-text">2.3.1. 问题生成器</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A8%A1%E6%9D%BF%E7%94%9F%E6%88%90"><span class="nav-number">3.1.1.</span> <span class="nav-text">模板生成</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%97%AE%E9%A2%98%E7%94%9F%E6%88%90"><span class="nav-number">3.1.2.</span> <span class="nav-text">问题生成</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-2-%E5%80%99%E9%80%89%E6%A3%80%E7%B4%A2%E5%99%A8"><span class="nav-number">3.2.</span> <span class="nav-text">2.3.2. 候选检索器</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%80%99%E9%80%89%E6%A3%80%E7%B4%A2%E6%9C%BA%E5%88%B6"><span class="nav-number">3.2.1.</span> <span class="nav-text">候选检索机制</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E9%97%AE%E9%A2%98%E8%83%8C%E6%99%AF%E4%B8%8E%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88"><span class="nav-number">3.2.1.1.</span> <span class="nav-text">问题背景与解决方案</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E8%BD%BB%E9%87%8F%E7%BA%A7%E6%A8%A1%E5%9E%8B%E8%AE%AD%E7%BB%83"><span class="nav-number">3.2.1.2.</span> <span class="nav-text">轻量级模型训练</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#%E8%AE%AD%E7%BB%83%E7%9B%AE%E6%A0%87"><span class="nav-number">3.2.1.2.1.</span> <span class="nav-text">训练目标</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E7%89%B9%E6%80%A7"><span class="nav-number">3.2.1.2.2.</span> <span class="nav-text">模型特性</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E5%AE%9E%E7%8E%B0"><span class="nav-number">3.2.1.2.3.</span> <span class="nav-text">模型实现</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%80%99%E9%80%89%E6%94%B6%E9%9B%86"><span class="nav-number">3.2.1.3.</span> <span class="nav-text">候选收集</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#%E6%8E%92%E5%BA%8F%E6%9C%BA%E5%88%B6"><span class="nav-number">3.2.1.3.1.</span> <span class="nav-text">排序机制</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#%E5%85%B7%E4%BD%93%E6%B5%81%E7%A8%8B"><span class="nav-number">3.2.1.3.2.</span> <span class="nav-text">具体流程</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4-%E5%8A%A8%E6%80%81%E5%AD%90%E5%9B%BERAG%E7%AD%96%E7%95%A5"><span class="nav-number">3.3.</span> <span class="nav-text">2.4. 动态子图RAG策略</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A6%82%E8%BF%B0"><span class="nav-number">3.3.1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8A%A8%E6%80%81%E5%AD%90%E5%9B%BE%E6%A3%80%E7%B4%A2"><span class="nav-number">3.3.2.</span> <span class="nav-text">动态子图检索</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%9B%AE%E6%A0%87"><span class="nav-number">3.3.2.1.</span> <span class="nav-text">目标</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E8%87%AA%E5%BA%95%E5%90%91%E4%B8%8A%E5%8A%A8%E6%80%81%E6%A3%80%E7%B4%A2%E6%96%B9%E6%A1%88"><span class="nav-number">3.3.2.2.</span> <span class="nav-text">自底向上动态检索方案</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%A3%80%E7%B4%A2%E6%B5%81%E7%A8%8B"><span class="nav-number">3.3.2.3.</span> <span class="nav-text">检索流程</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BB%93%E6%9E%84%E6%84%9F%E7%9F%A5%E5%B5%8C%E5%85%A5%E5%A2%9E%E5%BC%BA"><span class="nav-number">3.3.3.</span> <span class="nav-text">结构感知嵌入增强</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%BC%A0%E7%BB%9FRAG%E7%9A%84%E5%B1%80%E9%99%90%E6%80%A7"><span class="nav-number">3.3.3.1.</span> <span class="nav-text">传统RAG的局限性</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88%EF%BC%9A%E5%9B%BE%E4%B8%8A%E4%B8%8B%E6%96%87%E5%90%91%E9%87%8F%E5%8C%96"><span class="nav-number">3.3.3.2.</span> <span class="nav-text">解决方案：图上下文向量化</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#GCN%E9%80%82%E9%85%8D%E5%99%A8%E8%AE%BE%E8%AE%A1"><span class="nav-number">3.3.3.3.</span> <span class="nav-text">GCN适配器设计</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-5-%E6%8F%90%E7%A4%BA%E6%A8%A1%E6%9D%BF%E8%AE%BE%E8%AE%A1"><span class="nav-number">3.4.</span> <span class="nav-text">2.5. 提示模板设计</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A8%A1%E6%9D%BF%E7%BB%93%E6%9E%84%E6%A6%82%E8%BF%B0"><span class="nav-number">3.4.1.</span> <span class="nav-text">模板结构概述</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%BB%BB%E5%8A%A1%E6%8C%87%E4%BB%A4-Instruction"><span class="nav-number">3.4.1.1.</span> <span class="nav-text">任务指令 (Instruction)</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%80%99%E9%80%89%E5%AE%9E%E4%BD%93%E9%9B%86-Candidates-Set"><span class="nav-number">3.4.1.2.</span> <span class="nav-text">候选实体集 (Candidates Set)</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%BB%93%E6%9E%84%E5%8C%96%E5%B5%8C%E5%85%A5%E5%8D%A0%E4%BD%8D%E7%AC%A6-Structured-Embeddings-Placeholder"><span class="nav-number">3.4.1.3.</span> <span class="nav-text">结构化嵌入占位符 (Structured Embeddings Placeholder)</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%94%9F%E6%88%90%E7%9A%84%E9%97%AE%E9%A2%98-Generated-Question"><span class="nav-number">3.4.1.4.</span> <span class="nav-text">生成的问题 (Generated Question)</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%8C%E6%95%B4%E6%A8%A1%E6%9D%BF%E7%A4%BA%E4%BE%8B"><span class="nav-number">3.4.2.</span> <span class="nav-text">完整模板示例</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8A%80%E6%9C%AF%E5%AE%9E%E7%8E%B0%E7%BB%86%E8%8A%82"><span class="nav-number">3.4.3.</span> <span class="nav-text">技术实现细节</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%8D%A0%E4%BD%8D%E7%AC%A6%E6%9B%BF%E6%8D%A2%E6%9C%BA%E5%88%B6"><span class="nav-number">3.4.3.1.</span> <span class="nav-text">占位符替换机制</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%B5%8C%E5%85%A5%E8%A1%A8%E7%A4%BA"><span class="nav-number">3.4.3.2.</span> <span class="nav-text">嵌入表示</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%A4%84%E7%90%86%E6%B5%81%E7%A8%8B"><span class="nav-number">3.4.3.3.</span> <span class="nav-text">处理流程</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%AE%BE%E8%AE%A1%E4%BC%98%E5%8A%BF"><span class="nav-number">3.4.4.</span> <span class="nav-text">设计优势</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Ver0nical"
+      src="/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">Ver0nical</p>
+  <div class="site-description" itemprop="description">自此之后，有公义的冠冕为他留存</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">5</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Ver0nical</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">41k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">38 分钟</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+  <script defer src="/lib/three/three.min.js"></script>
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+<script>
+document.querySelectorAll('.pdfobject-container').forEach(element => {
+  let url = element.dataset.target;
+  let pdfOpenParams = {
+    navpanes : 0,
+    toolbar  : 0,
+    statusbar: 0,
+    pagemode : 'thumbs',
+    view     : 'FitH'
+  };
+  let pdfOpenFragment = '#' + Object.entries(pdfOpenParams).map(([key, value]) => `${key}=${encodeURIComponent(value)}`).join('&');
+  let fullURL = `/lib/pdf/web/viewer.html?file=${encodeURIComponent(url)}${pdfOpenFragment}`;
+
+  if (NexT.utils.supportsPDFs()) {
+    element.innerHTML = `<embed class="pdfobject" src="${url + pdfOpenFragment}" type="application/pdf" style="height: ${element.dataset.height};">`;
+  } else {
+    element.innerHTML = `<iframe src="${fullURL}" style="height: ${element.dataset.height};" frameborder="0"></iframe>`;
+  }
+});
+</script>
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>

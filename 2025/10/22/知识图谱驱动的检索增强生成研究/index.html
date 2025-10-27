@@ -243,9 +243,7 @@
         <p>内容来源：<a target="_blank" rel="noopener" href="https://arxiv.org/abs/2502.11108">arxiv</a><br>整理翻译：<a target="_blank" rel="noopener" href="https://github.com/Ver0nical">Ver0nical</a></p>
 <p>原文主要阐述了知识图谱驱动的检索增强生成是如何在具体知识领域发挥作用以及该模式的整体结构。由于笔者认为该论文主要涉及应用而非算法，故此处不总结原文，仅给出内容分析。</p>
 <span id="more"></span>
-
 <h2 id="系统的整体结构"><a href="#系统的整体结构" class="headerlink" title="系统的整体结构"></a>系统的整体结构</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">flowchart TD</span><br><span class="line">    subgraph Phase1 [阶段一：注释与数据收集]</span><br><span class="line">        A[使用Protege构建&lt;br&gt;CausalAMD本体] --&gt; B[使用本体标注&lt;br&gt;医学摘要]</span><br><span class="line">    end</span><br><span class="line"></span><br><span class="line">    subgraph Phase2 [阶段二：数据处理与知识图谱构建]</span><br><span class="line">        C[使用LLM&lt;br&gt;提取因果关系] --&gt; D[关系精炼&lt;br&gt;消歧/归一化/去重]</span><br><span class="line">        D --&gt; E[使用HermiT推理机&lt;br&gt;进行知识推理]</span><br><span class="line">        E --&gt; F[存入GraphDB&lt;br&gt;形成知识图谱]</span><br><span class="line">    end</span><br><span class="line"></span><br><span class="line">    subgraph Phase3 [阶段三：检索增强生成RAG]</span><br><span class="line">        G[用户查询] --&gt; H[Weaviate向量数据库&lt;br&gt;语义检索]</span><br><span class="line">        F --&gt; I[知识图谱&lt;br&gt;提供结构化数据]</span><br><span class="line">        I --&gt; H</span><br><span class="line">        H --&gt; J[构建增强上下文&lt;br&gt;含实体/关系/出版物]</span><br><span class="line">        J --&gt; K[DeepSeek-R1模型&lt;br&gt;生成可验证答案]</span><br><span class="line">        K --&gt; L[用户]</span><br><span class="line">    end</span><br><span class="line"></span><br><span class="line">    Phase1 --&gt; Phase2 --&gt; Phase3</span><br></pre></td></tr></table></figure>
-
 <p>其中，所使用的工具如下：</p>
 <ul>
 <li><strong>GraphDB</strong>: 一个图数据库，专门用于存储和查询RDF三元组形式的数据。它的原理是基于图论，能高效地处理实体之间复杂的、互联的关系，并支持SPARQL查询语言，非常适合表示知识图谱。</li>
@@ -253,7 +251,7 @@
 <li><strong>DeepSeek-R1</strong>: 一个开源的大语言模型。本文将其本地部署（通过Ollama），原理是利用其强大的自然语言理解和生成能力。本地部署的好处是数据隐私性好、无网络延迟、且无API调用成本。</li>
 <li><strong>HermiT</strong>: 一个本体推理机。它的原理是基于描述逻辑和规则，对本体中的数据进行检查和推理。例如，如果知识图谱中有“A治疗B”和“B是C的症状”，HermiT可以推理出“A改善C的症状”，从而自动丰富知识图谱。</li>
 </ul>
-<h2 id="创新-优点一览"><a href="#创新-优点一览" class="headerlink" title="创新&#x2F;优点一览"></a>创新&#x2F;优点一览</h2><ol>
+<h2 id="创新-优点一览"><a href="#创新-优点一览" class="headerlink" title="创新/优点一览"></a>创新/优点一览</h2><ol>
 <li>本系统从高度结构化的知识图谱中检索，信息质量更高、关联性更强。</li>
 <li>用于信息抽取的提示词模板是直接从本体自动生成的。这意味着当本体更新（如新增实体类型）时，提示词会自动同步，确保了抽取过程与领域模型的一致性。论文中通过少样本提示策略，有效约束了LLM的输出格式，提高了抽取的准确性。</li>
 <li>当证据不足或存在冲突时，系统被设计为主动声明不确定性，而不是强行给出一个可能错误的答案。</li>
@@ -382,7 +380,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">4</span>
+          <span class="site-state-item-count">5</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -395,7 +393,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-count">6</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -431,12 +429,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">36k</span>
+    <span title="站点总字数">41k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">33 分钟</span>
+    <span title="站点阅读时长">38 分钟</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
@@ -485,11 +483,86 @@
 
 
 
+<script>
+document.querySelectorAll('.pdfobject-container').forEach(element => {
+  let url = element.dataset.target;
+  let pdfOpenParams = {
+    navpanes : 0,
+    toolbar  : 0,
+    statusbar: 0,
+    pagemode : 'thumbs',
+    view     : 'FitH'
+  };
+  let pdfOpenFragment = '#' + Object.entries(pdfOpenParams).map(([key, value]) => `${key}=${encodeURIComponent(value)}`).join('&');
+  let fullURL = `/lib/pdf/web/viewer.html?file=${encodeURIComponent(url)}${pdfOpenFragment}`;
+
+  if (NexT.utils.supportsPDFs()) {
+    element.innerHTML = `<embed class="pdfobject" src="${url + pdfOpenFragment}" type="application/pdf" style="height: ${element.dataset.height};">`;
+  } else {
+    element.innerHTML = `<iframe src="${fullURL}" style="height: ${element.dataset.height};" frameborder="0"></iframe>`;
+  }
+});
+</script>
 
 
 
 
   
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
 
   
 

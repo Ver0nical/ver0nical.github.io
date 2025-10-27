@@ -74,7 +74,119 @@
   </style>
 </noscript>
 
-</head>
+<style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style></head>
 
 <body itemscope itemtype="http://schema.org/WebPage">
   <div class="container use-motion">
@@ -167,7 +279,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://ver0nical/2025/10/22/1/">
+    <link itemprop="mainEntityOfPage" href="http://ver0nical/2025/10/27/DrKGC/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -181,7 +293,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2025/10/22/1/" class="post-title-link" itemprop="url">《查询特定图神经网络：一种用于检索增强生成的全面图表表示学习方法》的导读及总结</a>
+            <a href="/2025/10/27/DrKGC/" class="post-title-link" itemprop="url">《DrKGC：用于通用和生物医学领域知识图谱补全的动态子图检索增强大语言模型》的导读及总结</a>
         </h2>
 
         <div class="post-meta">
@@ -191,14 +303,108 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2025-10-22 17:53:46" itemprop="dateCreated datePublished" datetime="2025-10-22T17:53:46+08:00">2025-10-22</time>
+              <time title="创建时间：2025-10-27 19:43:57" itemprop="dateCreated datePublished" datetime="2025-10-27T19:43:57+08:00">2025-10-27</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>4.6k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>4 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>内容来源：<a target="_blank" rel="noopener" href="https://arxiv.org/abs/2506.00708">arxiv</a><br>整理翻译：<a target="_blank" rel="noopener" href="https://github.com/Ver0nical">Ver0nical</a></p>
+<p>知识图谱补全（KGC）旨在通过利用知识图谱（KG）中已有的三元组和文本信息来预测缺失的三元组。</p>
+<p>然而，当前的方法通常以文本形式编码图上下文，这未能充分利用LLM在感知和推理图结构方面的潜力。</p>
+<p>为了解决这个问题，DrKGC 提出了一个动态子图检索增强大语言模型的框架，旨在通过检索与查询相关的子图来增强 KGC 任务的性能。</p>
+<p>本文有助于笔者理解有关LLMs增强KGC任务的最新进展，同时也为笔者提供了一些启发，帮助笔者在未来的研究中探索类似的方法。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/10/27/DrKGC/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://ver0nical/2025/10/23/1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Ver0nical">
+      <meta itemprop="description" content="自此之后，有公义的冠冕为他留存">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="维罗妮卡小屋">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/10/23/1/" class="post-title-link" itemprop="url">《查询特定图神经网络：一种用于检索增强生成的全面图表表示学习方法》的导读及总结</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2025-10-23 00:00:00" itemprop="dateCreated datePublished" datetime="2025-10-23T00:00:00+08:00">2025-10-23</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2025-10-23 01:33:31" itemprop="dateModified" datetime="2025-10-23T01:33:31+08:00">2025-10-23</time>
+                <time title="修改时间：2025-10-27 19:43:57" itemprop="dateModified" datetime="2025-10-27T19:43:57+08:00">2025-10-27</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -223,7 +429,7 @@
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>16 分钟</span>
+              <span>17 分钟</span>
             </span>
 
         </div>
@@ -235,14 +441,17 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>内容来源：<a target="_blank" rel="noopener" href="https://arxiv.org/abs/2510.11541">arxiv</a>; <a target="_blank" rel="noopener" href="https://github.com/Jerry2398/QSGNN">github</a><a href="%E9%A1%B9%E7%9B%AE%E6%BA%90%E7%A0%81%E5%9C%B0%E5%9D%80%E3%80%82">^1</a></p>
+          <p>内容来源：<a target="_blank" rel="noopener" href="https://arxiv.org/abs/2510.11541">arxiv</a>; <a target="_blank" rel="noopener" href="https://github.com/Jerry2398/QSGNN">github</a><sup><a href="#fn_1" id="reffn_1">1</a></sup></p>
+<blockquote id="fn_1">
+<sup>1</sup>. 项目源码地址。<a href="#reffn_1" title="Jump back to footnote [1] in the text."> ↩</a>
+</blockquote>
 <p>整理翻译：<a target="_blank" rel="noopener" href="https://github.com/Ver0nical">Ver0nical</a></p>
 <p>检索增强生成（RAG）已证明其能够通过整合外部知识源来增强大型语言模型（LLMs）。然而，多跳问题需要识别多个知识目标以形成综合答案，这给 RAG 系统带来了新的挑战。</p>
 <p>在多跳设置下，现有方法往往难以充分理解具有复杂语义结构的问题，并且在检索多个信息目标时容易受到无关噪声的影响。</p>
 <p>本篇论文聚焦于多跳场景下尤其是高跳数问题上的解决方案，对笔者理解如何更好的聚合KGs上的信息有较大帮助。</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2025/10/22/1/#more" rel="contents">
+              <a class="btn" href="/2025/10/23/1/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -333,7 +542,7 @@
           <p>内容整理：<a target="_blank" rel="noopener" href="https://github.com/Ver0nical">Ver0nical</a></p>
 <p>本文是对以前笔记的整理。</p>
 <h2 id="KGs"><a href="#KGs" class="headerlink" title="KGs"></a>KGs</h2><h3 id="Consist"><a href="#Consist" class="headerlink" title="Consist"></a>Consist</h3><ul>
-<li>Nodes (Entities) (节点 &#x2F; 实体)</li>
+<li>Nodes (Entities) (节点 / 实体)</li>
 <li>Edges (边)</li>
 <li>Attributes (属性)</li>
 </ul>
@@ -628,7 +837,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">4</span>
+          <span class="site-state-item-count">5</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -641,7 +850,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-count">6</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -677,12 +886,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">36k</span>
+    <span title="站点总字数">41k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">33 分钟</span>
+    <span title="站点阅读时长">38 分钟</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
@@ -731,11 +940,86 @@
 
 
 
+<script>
+document.querySelectorAll('.pdfobject-container').forEach(element => {
+  let url = element.dataset.target;
+  let pdfOpenParams = {
+    navpanes : 0,
+    toolbar  : 0,
+    statusbar: 0,
+    pagemode : 'thumbs',
+    view     : 'FitH'
+  };
+  let pdfOpenFragment = '#' + Object.entries(pdfOpenParams).map(([key, value]) => `${key}=${encodeURIComponent(value)}`).join('&');
+  let fullURL = `/lib/pdf/web/viewer.html?file=${encodeURIComponent(url)}${pdfOpenFragment}`;
+
+  if (NexT.utils.supportsPDFs()) {
+    element.innerHTML = `<embed class="pdfobject" src="${url + pdfOpenFragment}" type="application/pdf" style="height: ${element.dataset.height};">`;
+  } else {
+    element.innerHTML = `<iframe src="${fullURL}" style="height: ${element.dataset.height};" frameborder="0"></iframe>`;
+  }
+});
+</script>
 
 
 
 
   
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
 
   
 

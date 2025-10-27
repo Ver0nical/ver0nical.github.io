@@ -239,27 +239,22 @@
 <p>LLMs also face challenges in accurately interpreting phrases or terms when the context is vague and resides in a knowledge gap region of the model, leading to outputs that may sound plausible but are often irrelevant or incorrect Ji et al. (2023); Lenat and Marcus (2023).<br>当语境模糊且处于模型的知识空白区域时，大语言模型在准确解释短语或术语方面也面临挑战，导致其输出可能听起来合理但往往不相关或不正确 (Ji et al., 2023; Lenat and Marcus, 2023)。</p>
 <p>This phenomenon, often termed “hallucinations,” undermines the reliability of these models Mallen et al. (2023).<br>这种现象，通常被称为“幻觉”，削弱了这些模型的可靠性 (Mallen et al., 2023)。</p>
 <span id="more"></span>
-
 <h2 id="2-提出问题"><a href="#2-提出问题" class="headerlink" title="2 提出问题"></a>2 提出问题</h2><p>Can Knowledge Graphs Reduce Hallucinations in LLMs?<br>知识图谱能减少大语言模型的幻觉吗？</p>
 <h2 id="3-问题描述"><a href="#3-问题描述" class="headerlink" title="3 问题描述"></a>3 问题描述</h2><p>The LLMs primarily have three points of failure: a failure to comprehend the question due to lack of context, insufficient knowledge to respond accurately, or an inability to recall specific facts.<br>大语言模型主要有三个故障点：由于缺乏上下文而无法理解问题、知识不足无法准确回答、或者无法回忆起具体事实。</p>
 <h2 id="4-解决方法"><a href="#4-解决方法" class="headerlink" title="4 解决方法"></a>4 解决方法</h2><h3 id="4-1-Knowledge-Aware-Inference-知识感知推理"><a href="#4-1-Knowledge-Aware-Inference-知识感知推理" class="headerlink" title="4.1 Knowledge-Aware Inference 知识感知推理"></a>4.1 Knowledge-Aware Inference 知识感知推理</h3><p>LLMs often struggle with multi-step reasoning and, unlike humans, can not seek extra information to clarify ambiguous queries.<br>大语言模型通常难以进行多步推理，并且与人类不同，它们无法主动寻求额外信息来澄清模糊的查询。</p>
 <p>To improve LLMs’ inference and reasoning, researchers integrate KGs for structured symbolic knowledge, primarily by incorporating them at the input level to enhance contextual understanding.<br>为了改进大语言模型的推理能力，研究人员集成知识图谱以利用其结构化的符号知识，主要方式是在输入层面引入知识图谱来增强上下文理解。</p>
 <p>These methods, are further categorized into ‘KG-Augmented Retrieval,’ ‘KG-Augmented Reasoning,’ and ‘KG-Controlled Generation.’<br>这些方法进一步分为“知识图谱增强检索”、“知识图谱增强推理”和“知识图谱控制生成”。</p>
 <h4 id="4-1-1-KG-Augmented-Retrieval-知识图谱增强检索"><a href="#4-1-1-KG-Augmented-Retrieval-知识图谱增强检索" class="headerlink" title="4.1.1 KG-Augmented Retrieval 知识图谱增强检索"></a>4.1.1 KG-Augmented Retrieval 知识图谱增强检索</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">Baek et al. (Baek et al., 2023) introduced KAPING, which matches entities in questions to retrieve related triples from knowledge graphs for zero-shot question answering.</span><br><span class="line">Baek 等人 (Baek et al., 2023) 提出了 KAPING，该方法通过匹配问题中的实体，从知识图谱中检索相关的三元组，用于零样本问答。</span><br><span class="line"></span><br><span class="line">Wu et al. (Wu et al., 2023) found that converting these triples into textualized statements enhances LLM performance.</span><br><span class="line">Wu 等人 (Wu et al., 2023) 发现，将这些三元组转换为文本化语句可以提升大语言模型的性能。</span><br><span class="line"></span><br><span class="line">Sen et al. (Sen et al., 2023) developed a retriever module trained on a KGQA model, addressing the inadequacy of similarity-based retrieval for complex questions.</span><br><span class="line">Sen 等人 (Sen et al., 2023) 开发了一个在知识图谱问答模型上训练的检索器模块，解决了基于相似性的检索在处理复杂问题时的不足。</span><br><span class="line"></span><br><span class="line">StructGPT (Jiang et al., 2023) augments LLMs with data from knowledge graphs, tables, and databases, utilizing structured queries for information extraction.</span><br><span class="line">StructGPT (Jiang et al., 2023) 利用来自知识图谱、表格和数据库的数据增强大语言模型，使用结构化查询进行信息抽取。</span><br><span class="line"></span><br><span class="line">Other notable works include IAG(Zhang et al., 2023b), KICGPT (Wei et al., 2023), and SAFARI (Wang et al., 2023c).</span><br><span class="line">其他值得注意的工作包括 IAG (Zhang et al., 2023b)、KICGPT (Wei et al., 2023) 和 SAFARI (Wang et al., 2023c)。</span><br></pre></td></tr></table></figure>
-
 <p><strong>LLMs serve as natural language interfaces, extracting and generating information without relying on their internal knowledge.<br>大语言模型充当自然语言接口，在不依赖其内部知识的情况下提取和生成信息。</strong></p>
 <p>However, relying solely on internal databases can limit performance due to restricted knowledge bases.<br>然而，仅依赖内部数据库可能会因知识库受限而限制性能。</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Mallen et al. Mallen et al. (2023) investigated LLMs&#x27; factual knowledge retention, finding that augmenting with retrieved data improves performance.</span><br><span class="line">Mallen 等人 (Mallen et al., 2023) 研究了大语言模型的事实知识保留能力，发现用检索到的数据增强可以提高性能。</span><br></pre></td></tr></table></figure>
-
 <p>However, these models perform well with popular entities and relations but face challenges with less popular subjects, and increasing model size doesn’t improve their performance in such cases.<br>然而，这些模型在处理热门实体和关系时表现良好，但在处理较冷门主题时面临挑战，并且增加模型规模并不能改善它们在此类情况下的表现。</p>
 <h4 id="⭐4-1-2-KG-Augmented-Reasoning-知识图谱增强推理"><a href="#⭐4-1-2-KG-Augmented-Reasoning-知识图谱增强推理" class="headerlink" title="⭐4.1.2 KG-Augmented Reasoning 知识图谱增强推理"></a>⭐4.1.2 KG-Augmented Reasoning 知识图谱增强推理</h4><p>KG-augmented retrieval methods effectively answer factual questions.<br>知识图谱增强检索方法能有效回答事实性问题。</p>
 <p>However, questions that require reasoning call for more proficient approaches, such as decomposing complex, multi-step tasks into manageable sub-queries, as detailed by Qiao et al. (2022); Liu et al. (2023).<br>然而，需要推理的问题则要求更精通的方法，例如将复杂的多步骤任务分解为可管理的子查询，如 Qiao 等人 (2022) 和 Liu 等人 (2023) 所述。</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">Following the intuition behind the human reasoning process, the Chain of Thought (CoT) Wei et al. (2022a), Chain of Thought with Self-Consistency (CoT-SC) Wang et al. (2022), Program-Aided Language Model (PAL) Gao et al. (2023), and Reason and Act (ReAct) Yao et al. (2022), Reflexion Shinn et al. (2023) methods used a series of intermediate reasoning steps to improve the complex reasoning ability of LLMs.</span><br><span class="line">遵循人类推理过程的直觉，思维链、带自我一致性的思维链 (CoT-SC)、程序辅助语言模型、思考与行动 (ReAct) 以及 Reflexion 等方法，利用一系列中间推理步骤来提升大语言模型的复杂推理能力。</span><br><span class="line"></span><br><span class="line">Tree of Thoughts(ToT) Yao et al. (2023) method enhances this by exploring coherent text units as intermediate steps, enabling LLMs to consider multiple paths, self-evaluate, and make informed decisions.</span><br><span class="line">思维树方法通过将连贯的文本单元作为中间步骤进行探索，从而增强了这种能力，使大语言模型能够考虑多种路径、进行自我评估并做出明智的决策。</span><br><span class="line"></span><br><span class="line">IRCoT Trivedi et al. (2022) interleaves generating chain-of-thoughts (CoT) and retrieving knowledge from graphs, iteratively guiding retrieval and reasoning for multi-step questions.</span><br><span class="line">IRCoT 将生成思维链和从图谱中检索知识交织在一起，迭代地指导多步问题的检索和推理。</span><br><span class="line"></span><br><span class="line">MindMap Wen et al. (2023) introduces a plug-and-play approach to evoke graph-of-thoughts reasoning in LLMs.</span><br><span class="line">MindMap 引入了一种即插即用的方法，在大语言模型中激发图式思维推理。</span><br><span class="line"></span><br><span class="line">Reasoning on Graphs (RoG) Luo et al. (2023) uses knowledge graphs to create faithful reasoning paths based on various relations, enabling interpretable and accurate reasoning in LLMs.</span><br><span class="line">基于图谱的推理 (RoG) 使用知识图谱，基于多种关系创建可信的推理路径，从而在大语言模型中实现可解释且准确的推理。</span><br><span class="line"></span><br><span class="line">Complementary advancements include MoT Li and Qiu (2023), Democratizing Reasoning Wang et al. (2023c), ReCEval Prasad et al. (2023), RAP Hao et al. (2023), EoT Yin et al. (2023b) and Tree Prompting Singh et al. (2023), each contributing uniquely to the development of reasoning capabilities in LLMs.</span><br><span class="line">互补性的进展包括记忆思维、民主化推理、ReCEval、RAP、交换思维和树状提示，每一项都对大语言模型推理能力的发展做出了独特贡献。</span><br></pre></td></tr></table></figure>
-
 <p>However, the fundamental question of whether neural networks genuinely engage in “reasoning” remains unanswered, and it is uncertain whether following the correct reasoning path always leads to accurate answers Qiao et al. (2022); Jiang et al. (2020).<br>然而，神经网络是否真正进行“推理”这个基本问题仍然没有答案，并且尚不确定遵循正确的推理路径是否总能得到准确的答案 (Qiao et al., 2022; Jiang et al., 2020)。</p>
 <h3 id="4-1-3-Knowledge-Controlled-Generation-知识控制生成"><a href="#4-1-3-Knowledge-Controlled-Generation-知识控制生成" class="headerlink" title="4.1.3 Knowledge-Controlled Generation 知识控制生成"></a>4.1.3 Knowledge-Controlled Generation 知识控制生成</h3><p>These methods generate knowledge using a language model and then use probing or API calls for tasks.<br>这些方法首先使用语言模型生成知识，然后通过探测或API调用来执行任务。</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">Liu et al. Liu et al. (2021) used a second model to produce question-related knowledge statements for deductions.</span><br><span class="line">Liu 等人 (Liu et al., 2021) 使用第二个模型来生成与问题相关的知识陈述，以进行推论。</span><br><span class="line"></span><br><span class="line">Binder Cheng et al. (2022) uses Codex to parse context and generate task API calls.</span><br><span class="line">Binder (Cheng et al., 2022) 使用 Codex 来解析上下文并生成任务 API 调用。</span><br><span class="line"></span><br><span class="line">KB-Binder Li et al. (2023) also employs Codex to create logical drafts for questions, integrating knowledge graphs for complete answers.</span><br><span class="line">KB-Binder (Li et al., 2023) 同样使用 Codex 为问题创建逻辑草案，并集成知识图谱以生成完整答案。</span><br><span class="line"></span><br><span class="line">Brate et al. Brate et al. (2022) create cloze-style prompts for entities in knowledge graphs, enhancing them with auxiliary data via SPARQL queries, improving recall and accuracy.</span><br><span class="line">Brate 等人 (Brate et al., 2022) 为知识图谱中的实体创建填空式提示，并通过 SPARQL 查询用辅助数据增强这些提示，从而提高了召回率和准确率。</span><br><span class="line"></span><br><span class="line">KnowPrompt Chen et al. (2022) generates prompts from a pre-trained model and tunes them for relation extraction in cloze-style tasks.</span><br><span class="line">KnowPrompt (Chen et al., 2022) 从预训练模型生成提示，并针对填空式任务中的关系抽取对这些提示进行微调。</span><br><span class="line"></span><br><span class="line">BeamQA Atif et al. (2023) uses a language model to generate inference paths for knowledge graph embedding-based search in link prediction.</span><br><span class="line">BeamQA (Atif et al., 2023) 使用语言模型生成推理路径，用于链接预测中基于知识图谱嵌入的搜索。</span><br><span class="line"></span><br><span class="line">ALCUNA Yin et al. (2023a) and PRCA Yang et al. (2023) are other significant methods in controlled generation.</span><br><span class="line">ALCUNA (Yin et al., 2023a) 和 PRCA (Yang et al., 2023) 是控制生成领域的其他重要方法。</span><br><span class="line"></span><br><span class="line">NeMo guardrails Rebedea et al. (2023) by Nvidia guide conversational flows in enterprise applications to meet safety and security standards.</span><br><span class="line">英伟达的 NeMo 防护栏 (Rebedea et al., 2023) 在企业应用中引导对话流程，以满足安全性和安保标准。</span><br></pre></td></tr></table></figure>
-
 <p>Knowledge-controlled generation ensures alignment with facts and prevents misinformation.<br>知识控制生成确保了与事实的一致性并防止错误信息。</p>
 <p>Knowledge graph ontologies can provide specific domain constraints, aiding LLMs in defining output generation boundaries.<br>知识图谱的本体可以提供特定的领域约束，帮助大语言模型定义输出生成的边界。</p>
 <h3 id="4-2-Knowledge-Aware-Learning-知识感知学习"><a href="#4-2-Knowledge-Aware-Learning-知识感知学习" class="headerlink" title="4.2 Knowledge-Aware Learning 知识感知学习"></a>4.2 Knowledge-Aware Learning 知识感知学习</h3><p>Another stage where we can address hallucination issues in LLMs is to utilize KGs to optimize their learning either by improving the quality of training data at the model pre-training stage or by fine-tuning the pre-trained language model (PLM) to adapt to specific tasks or domains.<br>解决大语言模型幻觉问题的另一个阶段是利用知识图谱来优化其学习过程，这可以通过在模型预训练阶段提高训练数据的质量，或者通过微调预训练语言模型使其适应特定任务或领域来实现。</p>
@@ -267,14 +262,11 @@
 <h4 id="4-2-1-Knowledge-Aware-Pre-Training-知识感知预训练"><a href="#4-2-1-Knowledge-Aware-Pre-Training-知识感知预训练" class="headerlink" title="4.2.1 Knowledge-Aware Pre-Training 知识感知预训练"></a>4.2.1 Knowledge-Aware Pre-Training 知识感知预训练</h4><p>Training data quality and diversity are crucial for reducing hallucinations in LLMs.<br>训练数据的质量和多样性对于减少大语言模型的幻觉至关重要。</p>
 <p>Different approaches were proposed by researchers Yu et al. (2023); Fu et al. (2023); Deng et al. (2023b); Liu et al. (2020); Poerner et al. (2019); Peters et al. (2019) for pre-training models by augmenting knowledge graphs in training data.<br>研究人员提出了不同的方法 (Yu et al., 2023; Fu et al., 2023; Deng et al., 2023b; Liu et al., 2020; Poerner et al., 2019; Peters et al., 2019)，通过在训练数据中增强知识图谱来进行模型预训练。</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Knowledge-Enhanced Models: These methods enriched the large-scale text corpora with KGs for improved language representation.</span><br><span class="line">知识增强模型：这些方法利用知识图谱丰富大规模文本语料库，以改进语言表征。</span><br><span class="line"></span><br><span class="line">Knowledge-Guided Masking: Knowledge graph-guided entity masking schemes Shen et al. (2020); Zhang et al. (2023a) utilized linked knowledge graphs to mask key entities in texts, enhancing question-answering and knowledge-base completion tasks by leveraging relational knowledge.</span><br><span class="line">知识引导掩码：知识图谱引导的实体掩码方案 (Shen et al., 2020; Zhang et al., 2023a) 利用链接的知识图谱来掩码文本中的关键实体，通过利用关系知识来增强问答和知识库补全任务。</span><br><span class="line"></span><br><span class="line">Knowledge-Fusion: These methods integrates the KGs into LLMs using graph query encoders Wang et al. (2021); Ke et al. (2021); He et al. (2019).</span><br><span class="line">知识融合：这些方法使用图查询编码器将知识图谱集成到大语言模型中 (Wang et al., 2021; Ke et al., 2021; He et al., 2019)。</span><br><span class="line"></span><br><span class="line">Knowledge-Probing: Knowledge probing involves examining language models to assess their factual and commonsense knowledge Petroni et al. (2019).</span><br><span class="line">知识探测：知识探测涉及检查语言模型以评估其事实性和常识性知识 (Petroni et al., 2019)。</span><br></pre></td></tr></table></figure>
-
 <h4 id="4-2-2-Knowledge-Aware-Fine-Tuning-知识感知微调"><a href="#4-2-2-Knowledge-Aware-Fine-Tuning-知识感知微调" class="headerlink" title="4.2.2 Knowledge-Aware Fine-Tuning 知识感知微调"></a>4.2.2 Knowledge-Aware Fine-Tuning 知识感知微调</h4><p>Fine-tuning adapts LLMs to specific domains by training them on relevant datasets, using selected architectures and hyper-parameters to modify the model’s weights for improved task performance Guu et al. (2020); Hu et al. (2021); Lu et al. (2022); Dettmers et al. (2023).<br>微调通过在有针对性的数据集上训练大语言模型，使其适应特定领域，使用选定的架构和超参数来修改模型的权重，以提高任务性能 (Guu et al., 2020; Hu et al., 2021; Lu et al., 2022; Dettmers et al., 2023)。</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">SKILL Moiseev et al. (2022) used synthetic sentences converted from WikiData Seminar et al. (2019) and KELM Agarwal et al. (2020) used KGs to fine-tune the pre-trained model checkpoints.</span><br><span class="line">SKILL (Moiseev et al., 2022) 使用了从 WikiData (Seminar et al., 2019) 转换而来的合成句子，而 KELM (Agarwal et al., 2020) 使用知识图谱来微调预训练模型的检查点。</span><br><span class="line"></span><br><span class="line">KGLM Youn and Tagkopoulos (2022) employed an entity-relation embedding layer with KG triples for link prediction tasks.</span><br><span class="line">KGLM (Youn and Tagkopoulos, 2022) 采用了一个结合了知识图谱三元组的实体-关系嵌入层，用于链接预测任务。</span><br><span class="line"></span><br><span class="line">Cross-lingual reasoning Foroutan et al. (2023) improved by fine-tuning MultiLM, mBERT, and mT5 models with logical datasets using a self-attention network.</span><br><span class="line">跨语言推理 (Foroutan et al., 2023) 通过使用自注意力网络，在逻辑数据集上微调 MultiLM、mBERT 和 mT5 模型，从而得到了改进。</span><br><span class="line"></span><br><span class="line">LLMs improve more with additional training using datasets with few-shot CoT reasoning prompts and fine-tuning Kim et al. (2023); Huang et al. (2022).</span><br><span class="line">通过使用包含少量样本思维链推理提示的数据集进行额外训练和微调，大语言模型得到了更大的改进 (Kim et al., 2023; Huang et al., 2022)。</span><br></pre></td></tr></table></figure>
-
 <p>Fine-tuning language models like ChatGPT, limited by their last knowledge update in 2021, is more efficient than training from scratch.<br>对于像 ChatGPT 这样知识截止于 2021 年的语言模型，微调比从头开始训练更高效。</p>
 <p>The extent to which updated knowledge is integrated into the model remains to be determined.<br>更新后的知识在多大程度上被整合到模型中，仍有待确定。</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Onoe et al.&#x27;s Onoe et al. (2023) evaluation framework indicate that while models can recall facts about new entities, inferring based on these is harder.</span><br><span class="line">Onoe 等人 (Onoe et al., 2023) 的评估框架表明，虽然模型可以回忆关于新实体的事实，但基于这些事实进行推断则更加困难。</span><br></pre></td></tr></table></figure>
-
 <p>The effect of updating knowledge on existing entities is still an open research question.<br>更新知识对现有实体的影响仍然是一个开放的研究问题。</p>
 <h3 id="4-3-Knowledge-Aware-Validation-知识感知验证"><a href="#4-3-Knowledge-Aware-Validation-知识感知验证" class="headerlink" title="4.3 Knowledge-Aware Validation 知识感知验证"></a>4.3 Knowledge-Aware Validation 知识感知验证</h3><p>The third category type uses structured data as a fact-checking mechanism and provides a reference for the model to verify information.<br>第三类方法使用结构化数据作为事实核查机制，并为模型验证信息提供参考。</p>
 <p>These methods also help enforce consistency across the facts, obviating the necessity for laborious human-annotated data and enhancing the reliability of generated content.<br>这些方法还有助于确保事实的一致性，省去了繁琐的人工标注数据的必要性，并增强了生成内容的可靠性。</p>
@@ -396,7 +388,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">4</span>
+          <span class="site-state-item-count">5</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -409,7 +401,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-count">6</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -445,12 +437,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">36k</span>
+    <span title="站点总字数">41k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">33 分钟</span>
+    <span title="站点阅读时长">38 分钟</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
@@ -499,11 +491,86 @@
 
 
 
+<script>
+document.querySelectorAll('.pdfobject-container').forEach(element => {
+  let url = element.dataset.target;
+  let pdfOpenParams = {
+    navpanes : 0,
+    toolbar  : 0,
+    statusbar: 0,
+    pagemode : 'thumbs',
+    view     : 'FitH'
+  };
+  let pdfOpenFragment = '#' + Object.entries(pdfOpenParams).map(([key, value]) => `${key}=${encodeURIComponent(value)}`).join('&');
+  let fullURL = `/lib/pdf/web/viewer.html?file=${encodeURIComponent(url)}${pdfOpenFragment}`;
+
+  if (NexT.utils.supportsPDFs()) {
+    element.innerHTML = `<embed class="pdfobject" src="${url + pdfOpenFragment}" type="application/pdf" style="height: ${element.dataset.height};">`;
+  } else {
+    element.innerHTML = `<iframe src="${fullURL}" style="height: ${element.dataset.height};" frameborder="0"></iframe>`;
+  }
+});
+</script>
 
 
 
 
   
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
 
   
 
